@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 270692574}
   - 114: {fileID: 270692573}
+  - 65: {fileID: 270692575}
   m_Layer: 0
   m_Name: ClutterNode
   m_TagString: Untagged
@@ -113,6 +114,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shape: 0
+  go: {fileID: 124542, guid: a044b97d1ccd2ca418ca5b017e805458, type: 2}
+  SpawnObjects: 0
+  DeleteObjects: 0
 --- !u!4 &270692574
 Transform:
   m_ObjectHideFlags: 0
@@ -120,12 +124,24 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 270692572}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.461, z: 0}
+  m_LocalPosition: {x: 0, y: 2.197, z: -0.486}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!65 &270692575
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 270692572}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &959427033
 GameObject:
   m_ObjectHideFlags: 0

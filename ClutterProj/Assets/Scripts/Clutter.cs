@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using System.Collections;
+using System.Reflection;
 
+[ExecuteInEditMode]
 public class Clutter : MonoBehaviour {
 
     //enums for collider selection in inspector
@@ -15,21 +20,22 @@ public class Clutter : MonoBehaviour {
     public colliderMenu shape = colliderMenu.Box;
     Collider col;
 
+    public GameObject go;
 
     public void Awake()
     {
         col = gameObject.GetComponent<Collider>();
     }
 
-	
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    void Start() {
+
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-      
+        ShapeColliders();
     }
 
 
@@ -65,4 +71,30 @@ public class Clutter : MonoBehaviour {
                 break;
         }
     }
+
+    //button for generating objects
+    //credit to "zaikman" for the script
+    [Space(10)]
+
+    [InspectorButton("OnButtonClicked")]
+    public bool SpawnObjects;//makes a button with this bool
+
+    [Space(10)]
+
+    [InspectorButton("DeleteObject")]
+    public bool DeleteObjects;
+
+    Object testGo;
+
+    private void OnButtonClicked()
+    {
+        Debug.Log("shit worked yo");
+        testGo = Instantiate(go, gameObject.transform.position, Quaternion.identity);//placeholder spawn
+    }
+
+    private void DeleteObject()
+    {
+        DestroyImmediate(testGo);//placeholder
+    }
+    
 }
