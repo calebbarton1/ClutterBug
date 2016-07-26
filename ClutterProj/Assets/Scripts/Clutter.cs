@@ -3,6 +3,7 @@
 using UnityEditor;
 #endif
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 [ExecuteInEditMode]
@@ -16,11 +17,35 @@ public class Clutter : MonoBehaviour {
         Cylinder
     }
 
+    //buttons for generating objects
+    //credit to "zaikman" for the script
+
+    [Space(10)]
+
+    [InspectorButton("SpawnObjectsInArea")]
+    public bool SpawnObjects;//makes a button with this bool
+
+    [Space(10)]
+
+    [InspectorButton("DeleteObject")]
+    public bool DeleteObjects;
+
+    [Space(10)]
+
+
     //initialise enum and colliders
     public colliderMenu shape = colliderMenu.Box;
     Collider col;
 
-    public GameObject go;
+    public GameObject go;//temp
+
+    public int numberToSpawn;
+
+    [HideInInspector]
+    public List<Object> spawnedObjects;
+
+
+
 
     public void Awake()
     {
@@ -46,7 +71,7 @@ public class Clutter : MonoBehaviour {
             case colliderMenu.Box:
                 if (col.GetType() != typeof(BoxCollider))//checks what collider is currently on node
                 {
-                    Destroy(col);//destroys previous collider
+                    DestroyImmediate(col);//destroys previous collider
                     col = gameObject.AddComponent<BoxCollider>();//makes new one
                 }
                 break;
@@ -54,7 +79,7 @@ public class Clutter : MonoBehaviour {
             case colliderMenu.Sphere:
                 if (col.GetType() != typeof(SphereCollider))
                 {
-                    Destroy(col);
+                    DestroyImmediate(col);
                     col = gameObject.AddComponent<SphereCollider>();
                 }
                 break;
@@ -62,7 +87,7 @@ public class Clutter : MonoBehaviour {
             case colliderMenu.Cylinder:
                 if (col.GetType() != typeof(CapsuleCollider))
                 {
-                    Destroy(col);
+                    DestroyImmediate(col);
                     col = gameObject.AddComponent<CapsuleCollider>();
                 }
                 break;
@@ -72,29 +97,58 @@ public class Clutter : MonoBehaviour {
         }
     }
 
-    //button for generating objects
-    //credit to "zaikman" for the script
-    [Space(10)]
+   
 
-    [InspectorButton("OnButtonClicked")]
-    public bool SpawnObjects;//makes a button with this bool
-
-    [Space(10)]
-
-    [InspectorButton("DeleteObject")]
-    public bool DeleteObjects;
-
-    Object testGo;
-
-    private void OnButtonClicked()
+    private void SpawnObjectsInArea()
     {
-        Debug.Log("shit worked yo");
-        testGo = Instantiate(go, gameObject.transform.position, Quaternion.identity);//placeholder spawn
+        DeleteObject(); //Delete previously placed objects
+
+        switch (shape)
+        {
+            case colliderMenu.Box:
+
+                for (int index = 0; index < numberToSpawn; ++index)
+                {
+                    Object tempObj;
+                    Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x,y,z within sube
+                    spawnPos = transform.TransformPoint(spawnPos * .5f); //takes transform in world space and modifies it
+
+
+                    RaycastHit hit;
+
+                    while (!Physics.Raycast(spawnPos, Vector3.down, out hit))//will check if out of bounds, and keep moving the position up until a solid ground is found
+                    {
+                        ++spawnPos.y;
+                    }
+                       
+
+                    if (Physics.Raycast(spawnPos, Vector3.down, out hit))
+                    {
+                        tempObj = Instantiate(go, new Vector3(hit.point.x, hit.point.y + (go.transform.localScale.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast
+                        spawnedObjects.Add(tempObj);
+                    }
+                }
+
+                break;
+
+            case colliderMenu.Sphere:
+                break;
+            case colliderMenu.Cylinder:
+                break;
+            default:
+                break;
+        }    
     }
 
     private void DeleteObject()
     {
-        DestroyImmediate(testGo);//placeholder
+        //destroy all objects spawned then clear the list
+       for (int index = spawnedObjects.Count; index > 0; --index)
+        {
+            DestroyImmediate(spawnedObjects[index - 1]);
+        }
+
+        spawnedObjects.Clear();
     }
     
 }

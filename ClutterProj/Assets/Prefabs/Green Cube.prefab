@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3389678}
   - 65: {fileID: 6533106}
   - 23: {fileID: 2399100}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Green Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
