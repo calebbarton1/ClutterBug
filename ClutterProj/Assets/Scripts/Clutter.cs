@@ -64,7 +64,7 @@ public class Clutter : MonoBehaviour {
     }
 
 
-    public void ShapeColliders()
+    public void ShapeColliders()//currently just tells me what the shape of the transform is
     {
         switch (shape)
         {
@@ -88,7 +88,7 @@ public class Clutter : MonoBehaviour {
                 if (col.GetType() != typeof(CapsuleCollider))
                 {
                     DestroyImmediate(col);
-                    col = gameObject.AddComponent<CapsuleCollider>();
+                    col = gameObject.AddComponent<CapsuleCollider>();//not sure how to change defaults from code, as it looks like a circle
                 }
                 break;
 
@@ -110,17 +110,58 @@ public class Clutter : MonoBehaviour {
                 for (int index = 0; index < numberToSpawn; ++index)
                 {
                     Object tempObj;
-                    Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x,y,z within sube
+                    Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x,y,z
                     spawnPos = transform.TransformPoint(spawnPos * .5f); //takes transform in world space and modifies it
 
 
                     RaycastHit hit;
+                    int breakLimit = 0;
 
-                    while (!Physics.Raycast(spawnPos, Vector3.down, out hit))//will check if out of bounds, and keep moving the position up until a solid ground is found
+                    while (!Physics.Linecast(spawnPos, Vector3.down * 100))//will check if cast goes through floor, and keep moving the position up until a solid ground is found
                     {
                         ++spawnPos.y;
+                        ++breakLimit;
+
+                        if (breakLimit > 25)//will stop function if there is no ground at all
+                        {
+                            Debug.LogWarning("No collider found. Object not instantiated.");
+                            return;
+                        }
+                    }                       
+
+                    if (Physics.Raycast(spawnPos, Vector3.down, out hit))//raycast down from random location to the floor
+                    {
+                        tempObj = Instantiate(go, new Vector3(hit.point.x, hit.point.y + (go.transform.localScale.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast
+                        spawnedObjects.Add(tempObj);//add to an invisible list so we can delete them if need be
                     }
-                       
+                }
+
+                break;
+
+            case colliderMenu.Sphere:
+
+                for (int index = 0; index < numberToSpawn; ++index)
+                {
+                    Object tempObj;
+                    Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
+                    spawnPos = transform.TransformPoint(spawnPos * .5f); //takes transform in world space and modifies it using random value
+
+
+                    RaycastHit hit;
+                    int breakLimit = 0;
+
+                    while (!Physics.Linecast(spawnPos, Vector3.down * 100))//will check if cast goes through floor, and keep moving the position up until a solid ground is found
+                    {
+                        ++spawnPos.y;
+                        ++breakLimit;
+
+                        if (breakLimit > 100)
+                        {
+                            Debug.LogWarning("No collider found. Object not instantiated.");
+                            return;
+                        }
+                    }
+
 
                     if (Physics.Raycast(spawnPos, Vector3.down, out hit))
                     {
@@ -128,13 +169,12 @@ public class Clutter : MonoBehaviour {
                         spawnedObjects.Add(tempObj);
                     }
                 }
-
                 break;
 
-            case colliderMenu.Sphere:
-                break;
             case colliderMenu.Cylinder:
+
                 break;
+
             default:
                 break;
         }    
