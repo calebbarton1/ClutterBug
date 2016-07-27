@@ -34,11 +34,17 @@ public class Clutter : MonoBehaviour {
 
 
     //initialise enum and colliders
+    [Tooltip("The shape of the area where objects are placed")]
     public colliderMenu shape = colliderMenu.Box;
     Collider col;
 
-    public GameObject go;//temp
+    [Tooltip("Adds clutter per click instead of rerolling")]
+    public bool Additive = false;
 
+    [Tooltip("Objects to be created as clutter")]
+    public List<GameObject> goList;//temp
+
+    [Tooltip("Number of clutter created")]
     public int numberToSpawn;
 
     [HideInInspector]
@@ -64,7 +70,7 @@ public class Clutter : MonoBehaviour {
     }
 
 
-    public void ShapeColliders()//currently just tells me what the shape of the transform is
+    public void ShapeColliders()//currently just tells me what the shape of the transform is in the editor
     {
         switch (shape)
         {
@@ -101,84 +107,52 @@ public class Clutter : MonoBehaviour {
 
     private void SpawnObjectsInArea()
     {
-        DeleteObject(); //Delete previously placed objects
+        if (!Additive)
+            DeleteObject(); //Delete previously placed objects
 
-        switch (shape)
+        if (goList.Count != 0)
         {
-            case colliderMenu.Box:
+            switch (shape)
+            {
+                case colliderMenu.Box:
 
-                for (int index = 0; index < numberToSpawn; ++index)
-                {
-                    Object tempObj;
-                    Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x,y,z
-                    spawnPos = transform.TransformPoint(spawnPos * .5f); //takes transform in world space and modifies it
-
-
-                    RaycastHit hit;
-                    int breakLimit = 0;
-
-                    while (!Physics.Linecast(spawnPos, Vector3.down * 100))//will check if cast goes through floor, and keep moving the position up until a solid ground is found
+                    for (int index = 0; index < numberToSpawn; ++index)
                     {
-                        ++spawnPos.y;
-                        ++breakLimit;
-
-                        if (breakLimit > 25)//will stop function if there is no ground at all
-                        {
-                            Debug.LogWarning("No collider found. Object not instantiated.");
-                            return;
-                        }
-                    }                       
-
-                    if (Physics.Raycast(spawnPos, Vector3.down, out hit))//raycast down from random location to the floor
-                    {
-                        tempObj = Instantiate(go, new Vector3(hit.point.x, hit.point.y + (go.transform.localScale.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast
-                        spawnedObjects.Add(tempObj);//add to an invisible list so we can delete them if need be
+                        Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x,y,z
+                        InstantiateRandomObject(spawnPos);
                     }
-                }
 
-                break;
+                    break;
 
-            case colliderMenu.Sphere:
+                case colliderMenu.Sphere:
 
-                for (int index = 0; index < numberToSpawn; ++index)
-                {
-                    Object tempObj;
-                    Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
-                    spawnPos = transform.TransformPoint(spawnPos * .5f); //takes transform in world space and modifies it using random value
-
-
-                    RaycastHit hit;
-                    int breakLimit = 0;
-
-                    while (!Physics.Linecast(spawnPos, Vector3.down * 100))//will check if cast goes through floor, and keep moving the position up until a solid ground is found
+                    for (int index = 0; index < numberToSpawn; ++index)
                     {
-                        ++spawnPos.y;
-                        ++breakLimit;
-
-                        if (breakLimit > 100)
-                        {
-                            Debug.LogWarning("No collider found. Object not instantiated.");
-                            return;
-                        }
+                        Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
+                        InstantiateRandomObject(spawnPos);
                     }
 
 
-                    if (Physics.Raycast(spawnPos, Vector3.down, out hit))
-                    {
-                        tempObj = Instantiate(go, new Vector3(hit.point.x, hit.point.y + (go.transform.localScale.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast
-                        spawnedObjects.Add(tempObj);
-                    }
-                }
-                break;
+                    break;
 
-            case colliderMenu.Cylinder:
+                case colliderMenu.Cylinder:
 
-                break;
+                    Debug.Log("Not in program yet");
 
-            default:
-                break;
-        }    
+                    break;
+
+                default:
+                    break;
+            }
+            
+        }
+
+        else
+        {
+            Debug.LogWarning("No Objects in List!");
+        }
     }
+    
 
     private void DeleteObject()
     {
@@ -190,5 +164,49 @@ public class Clutter : MonoBehaviour {
 
         spawnedObjects.Clear();
     }
-    
+
+    public GameObject RandomObject()//temp
+    {
+        GameObject go;
+        int objIndex;
+
+        objIndex = Random.Range(0, goList.Count);
+        go = goList[objIndex];
+
+        return go;        
+    }
+
+    public void InstantiateRandomObject(Vector3 loc)//instantiates object with given location
+    {
+        Object tempObj;
+        RaycastHit hit;
+        int breakLimit = 0;
+
+        loc = transform.TransformPoint(loc * .5f); //takes transform in world space and modifies it using random value
+
+
+        //system will use the location, then raycast down to place the object
+        while (!Physics.Linecast(loc, Vector3.down * 100))//will check if cast goes through floor, and keep moving the position up until a solid ground is found
+        {
+            ++loc.y;
+            ++breakLimit;
+
+            if (breakLimit > 25)//will break function if there is no ground
+            {
+                Debug.Log("No collider found. Object not instantiated.");
+                return;
+            }
+        }
+
+
+        if (Physics.Raycast(loc, Vector3.down, out hit))
+        {
+            GameObject toSpawn;
+            toSpawn = RandomObject();
+
+            tempObj = Instantiate(toSpawn, new Vector3(hit.point.x, hit.point.y + (toSpawn.transform.localScale.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast
+            tempObj.name = toSpawn.name;
+            spawnedObjects.Add(tempObj);            
+        }
+    }
 }
