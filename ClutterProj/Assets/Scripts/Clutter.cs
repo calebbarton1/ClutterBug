@@ -14,7 +14,6 @@ public class Clutter : MonoBehaviour {
     {
         Box,
         Sphere,
-        Cylinder
     }
 
     //buttons for generating objects
@@ -36,13 +35,9 @@ public class Clutter : MonoBehaviour {
     //initialise enum and colliders
     [Tooltip("The shape of the area where objects are placed")]
     public colliderMenu shape = colliderMenu.Box;
-    Collider col;
 
     [Tooltip("Adds clutter per click instead of rerolling")]
     public bool Additive = false;
-
-    [Tooltip("Objects to be created as clutter")]
-    public List<GameObject> goList;//temp
 
     [Tooltip("Number of clutter created")]
     public int numberToSpawn;
@@ -50,55 +45,40 @@ public class Clutter : MonoBehaviour {
     [Tooltip("The angle of limit.\nIf a slope is less than or equal this value, clutter isn't spawned.")]
     public int degreeLimit = 45;
 
-    //parenting to a empty go made this reduntant, as this was for deleting objects
-    //[HideInInspector]
-    //public List<Object> spawnedObjects;
+    [Space(5)]
+
+    [Tooltip("Objects to be created as clutter")]
+    public List<GameObject> goList;//temp
+    
 
     private GameObject nodeParent;
-
-    public void Awake()
-    {
-        col = gameObject.GetComponent<Collider>();
-    }
-
 
     void Start() {
 
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        ShapeColliders();
-    }
+   // void Update()
+   // {
+   //     ShapeColliders();
+   // }
 
 
-    public void ShapeColliders()//currently just tells me what the shape of the transform is in the editor
+    public void OnDrawGizmos()//currently just tells me what the shape of the transform is in the editor
     {
+        Gizmos.color = new Color(0.50f, 1.0f, 1.0f, 0.5f);
         switch (shape)
         {
             case colliderMenu.Box:
-                if (col.GetType() != typeof(BoxCollider))//checks what collider is currently on node
-                {
-                    DestroyImmediate(col);//destroys previous collider
-                    col = gameObject.AddComponent<BoxCollider>();//makes new one
-                }
+                Gizmos.DrawCube(transform.position, transform.localScale);
+                Gizmos.color = new Color(0, 0, 0, .75f);
+                Gizmos.DrawWireCube(transform.position, transform.localScale);
                 break;
 
             case colliderMenu.Sphere:
-                if (col.GetType() != typeof(SphereCollider))
-                {
-                    DestroyImmediate(col);
-                    col = gameObject.AddComponent<SphereCollider>();
-                }
-                break;
-
-            case colliderMenu.Cylinder:
-                if (col.GetType() != typeof(CapsuleCollider))
-                {
-                    DestroyImmediate(col);
-                    col = gameObject.AddComponent<CapsuleCollider>();//not sure how to change defaults from code, as it looks like a circle
-                }
+                Gizmos.DrawSphere(transform.position, transform.localScale.x * .5f);
+                Gizmos.color = new Color(0, 0, 0, .75f);
+                Gizmos.DrawWireSphere(transform.position, transform.localScale.x * .5f);
                 break;
 
             default:
@@ -135,13 +115,6 @@ public class Clutter : MonoBehaviour {
                         InstantiateObject(spawnPos);
                     }
 
-
-                    break;
-
-                case colliderMenu.Cylinder:
-
-                    Debug.Log("Not in program yet");
-
                     break;
 
                 default:
@@ -174,9 +147,7 @@ public class Clutter : MonoBehaviour {
     }
 
     public void InstantiateObject(Vector3 _loc)//instantiates object with given location
-    {
-        
-        RaycastHit hit;
+    {        
         int breakLimit = 0;
 
         //gets random object
@@ -185,7 +156,7 @@ public class Clutter : MonoBehaviour {
 
         Renderer objSize = toSpawn.GetComponent<Renderer>();//caching render of prefab we want to spawn
 
-        _loc = transform.TransformPoint(_loc * .5f); //takes transform in world space and modifies it using random value
+        _loc = transform.TransformPoint(_loc * .45f); //takes transform in world space and modifies it using random value
 
 
         //system will use the location, then raycast down to place the object
@@ -194,13 +165,15 @@ public class Clutter : MonoBehaviour {
             ++_loc.y;
             ++breakLimit;
 
-            if (breakLimit > 10)//will break function if there is no ground
+            if (breakLimit > transform.localScale.y)//will break function if there is no ground
             {
                 Debug.Log("No collider found. Object not instantiated.");
                 return;
             }
         }
 
+
+        RaycastHit hit;
 
         if (Physics.Raycast(_loc, Vector3.down, out hit))
         {
@@ -209,6 +182,16 @@ public class Clutter : MonoBehaviour {
                 Debug.Log("Angle too sharp. Object not instantiated");
                 return;
             }
+
+            RaycastHit hit2;
+            if (Physics.SphereCast(_loc, objSize.bounds.size.x * .75f, Vector3.down, out hit2, transform.localScale.y))//lots of casting, but it works
+            {
+                if (hit2.collider.tag == "Clutter")
+                {
+                    Debug.Log("shits in way, not doin it");
+                    return;
+                }
+            }            
 
             GameObject tempObj;
             tempObj = (GameObject)Instantiate(toSpawn, new Vector3(hit.point.x, hit.point.y + (objSize.bounds.size.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast. The getcomponent is nasty, but I can't see a way around it.

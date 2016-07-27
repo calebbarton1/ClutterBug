@@ -9,7 +9,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 444846}
   - 114: {fileID: 11422224}
-  - 65: {fileID: 6539226}
   m_Layer: 2
   m_Name: ClutterNode
   m_TagString: Node
@@ -30,18 +29,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!65 &6539226
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 182922}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11422224
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -57,9 +44,9 @@ MonoBehaviour:
   DeleteObjects: 0
   shape: 0
   Additive: 0
-  goList: []
   numberToSpawn: 5
-  spawnedObjects: []
+  degreeLimit: 45
+  goList: []
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
