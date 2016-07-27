@@ -50,8 +50,7 @@ public class Clutter : MonoBehaviour {
     [HideInInspector]
     public List<Object> spawnedObjects;
 
-
-
+    private GameObject nodeParent;
 
     public void Awake()
     {
@@ -119,7 +118,7 @@ public class Clutter : MonoBehaviour {
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
                         Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x,y,z
-                        InstantiateRandomObject(spawnPos);
+                        InstantiateObject(spawnPos);
                     }
 
                     break;
@@ -129,7 +128,7 @@ public class Clutter : MonoBehaviour {
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
                         Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
-                        InstantiateRandomObject(spawnPos);
+                        InstantiateObject(spawnPos);
                     }
 
 
@@ -176,9 +175,9 @@ public class Clutter : MonoBehaviour {
         return go;        
     }
 
-    public void InstantiateRandomObject(Vector3 loc)//instantiates object with given location
+    public void InstantiateObject(Vector3 loc)//instantiates object with given location
     {
-        Object tempObj;
+        GameObject tempObj;
         RaycastHit hit;
         int breakLimit = 0;
 
@@ -204,8 +203,16 @@ public class Clutter : MonoBehaviour {
             GameObject toSpawn;
             toSpawn = RandomObject();
 
-            tempObj = Instantiate(toSpawn, new Vector3(hit.point.x, hit.point.y + (toSpawn.transform.localScale.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast
+            tempObj = (GameObject)Instantiate(toSpawn, new Vector3(hit.point.x, hit.point.y + (toSpawn.transform.localScale.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast
+
+            if (!nodeParent)
+            {
+                nodeParent = new GameObject("Clutter");
+            }
+
             tempObj.name = toSpawn.name;
+            tempObj.transform.parent = nodeParent.transform;
+            
             spawnedObjects.Add(tempObj);            
         }
     }
