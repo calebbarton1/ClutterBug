@@ -47,8 +47,12 @@ public class Clutter : MonoBehaviour {
     [Tooltip("Number of clutter created")]
     public int numberToSpawn;
 
-    [HideInInspector]
-    public List<Object> spawnedObjects;
+    [Tooltip("The angle of limit.\nIf a slope is less than or equal this value, clutter isn't spawned.")]
+    public int degreeLimit = 45;
+
+    //parenting to a empty go made this reduntant, as this was for deleting objects
+    //[HideInInspector]
+    //public List<Object> spawnedObjects;
 
     private GameObject nodeParent;
 
@@ -117,7 +121,7 @@ public class Clutter : MonoBehaviour {
 
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
-                        Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x,y,z
+                        Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x,y,z in a box
                         InstantiateObject(spawnPos);
                     }
 
@@ -155,13 +159,7 @@ public class Clutter : MonoBehaviour {
 
     private void DeleteObject()
     {
-        //destroy all objects spawned then clear the list
-       for (int index = spawnedObjects.Count; index > 0; --index)
-        {
-            DestroyImmediate(spawnedObjects[index - 1]);
-        }
-
-        spawnedObjects.Clear();
+        DestroyImmediate(nodeParent);
     }
 
     public GameObject RandomObject()//temp
@@ -175,22 +173,28 @@ public class Clutter : MonoBehaviour {
         return go;        
     }
 
-    public void InstantiateObject(Vector3 loc)//instantiates object with given location
+    public void InstantiateObject(Vector3 _loc)//instantiates object with given location
     {
-        GameObject tempObj;
+        
         RaycastHit hit;
         int breakLimit = 0;
 
-        loc = transform.TransformPoint(loc * .5f); //takes transform in world space and modifies it using random value
+        //gets random object
+        GameObject toSpawn;
+        toSpawn = RandomObject();
+
+        Renderer objSize = toSpawn.GetComponent<Renderer>();//caching render of prefab we want to spawn
+
+        _loc = transform.TransformPoint(_loc * .5f); //takes transform in world space and modifies it using random value
 
 
         //system will use the location, then raycast down to place the object
-        while (!Physics.Linecast(loc, Vector3.down * 100))//will check if cast goes through floor, and keep moving the position up until a solid ground is found
+        while (!Physics.Raycast(_loc, Vector3.down))//will check if cast goes through floor, and keep moving the position up until a solid ground is found
         {
-            ++loc.y;
+            ++_loc.y;
             ++breakLimit;
 
-            if (breakLimit > 25)//will break function if there is no ground
+            if (breakLimit > 10)//will break function if there is no ground
             {
                 Debug.Log("No collider found. Object not instantiated.");
                 return;
@@ -198,22 +202,22 @@ public class Clutter : MonoBehaviour {
         }
 
 
-        if (Physics.Raycast(loc, Vector3.down, out hit))
+        if (Physics.Raycast(_loc, Vector3.down, out hit))
         {
-            GameObject toSpawn;
-            toSpawn = RandomObject();
-
-            tempObj = (GameObject)Instantiate(toSpawn, new Vector3(hit.point.x, hit.point.y + (toSpawn.transform.localScale.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast
-
-            if (!nodeParent)
+            if (Vector3.Angle(Vector3.down,hit.normal) <= (180 - degreeLimit))
             {
-                nodeParent = new GameObject("Clutter");
+                Debug.Log("Angle too sharp. Object not instantiated");
+                return;
             }
 
+            GameObject tempObj;
+            tempObj = (GameObject)Instantiate(toSpawn, new Vector3(hit.point.x, hit.point.y + (objSize.bounds.size.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast. The getcomponent is nasty, but I can't see a way around it.
+
+            if (!nodeParent)
+                nodeParent = new GameObject("clutterParent");
+
             tempObj.name = toSpawn.name;
-            tempObj.transform.parent = nodeParent.transform;
-            
-            spawnedObjects.Add(tempObj);            
+            tempObj.transform.parent = nodeParent.transform;  
         }
     }
 }

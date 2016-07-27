@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3320466}
   - 65: {fileID: 6525826}
   - 23: {fileID: 2343250}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Yellow Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

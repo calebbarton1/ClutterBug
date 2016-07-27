@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3328268}
   - 136: {fileID: 13608680}
   - 23: {fileID: 2393316}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Blue Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3372912}
   - 135: {fileID: 13587426}
   - 23: {fileID: 2301296}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Red Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}

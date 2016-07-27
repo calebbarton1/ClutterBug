@@ -11,8 +11,8 @@ GameObject:
   - 33: {fileID: 3376836}
   - 65: {fileID: 6547096}
   - 23: {fileID: 2386330}
-  m_Layer: 2
-  m_Name: Blue Square
+  m_Layer: 8
+  m_Name: Blue Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

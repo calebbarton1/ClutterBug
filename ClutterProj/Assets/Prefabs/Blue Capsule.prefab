@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3327230}
   - 136: {fileID: 13603718}
   - 23: {fileID: 2314964}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Blue Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
