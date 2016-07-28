@@ -164,7 +164,7 @@ public class Clutter : MonoBehaviour {
 
         _loc = transform.TransformPoint(_loc * .45f); //takes transform in world space and modifies it using random value
 
-
+        /*
         //system will use the location, then raycast down to place the object
         while (!Physics.Linecast(_loc, Vector3.down * 50))//will check if cast goes through floor, and keep moving the position up until a solid ground is found
         {
@@ -179,30 +179,37 @@ public class Clutter : MonoBehaviour {
                 return;
             }
         }
-
+        */
 
         RaycastHit hit;
         bool cast;       
 
-        if (allowOverlap)        
-            cast = Physics.SphereCast(_loc, toSpawnRender.bounds.size.x * .5f, Vector3.down, out hit, 50, 8);//ignore clutter in the casting when enabled. Allows clutter to overlap each other.
+        if (allowOverlap)
+        {
+            int mask = LayerMask.NameToLayer("Clutter");//grab layer of clutter
+            mask = 1 << mask;//bitshift it
+            mask = ~mask;//we want to cast against everything else but the clutter
+
+            cast = Physics.SphereCast(_loc, toSpawnRender.bounds.size.x * .5f, Vector3.down, out hit, transform.localScale.y, mask);
+        }
+
 
         else
-            cast = Physics.SphereCast(_loc, toSpawnRender.bounds.size.x * .5f, Vector3.down, out hit, 50);
+            cast = Physics.SphereCast(_loc, toSpawnRender.bounds.size.x * .5f, Vector3.down, out hit, transform.localScale.y);
 
 
         if (cast)
         {
             if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - degreeLimit))//determines if an object will spawn depending on the angle of the collider below it. Set by user.
             {
-                Debug.Log("Angle too sharp. Object " + hit.collider.name + " not instantiated");
+                Debug.Log("Angle too sharp. Object " + toSpawn.name + " not instantiated");
                 return;
             }
 
             
-            if (hit.collider.gameObject.layer == 8 && !allowOverlap)//if the user chooses, objects will not overlap
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Clutter") && !allowOverlap)//if the user chooses, objects will not overlap
             {
-                Debug.Log("Clutter in the way. Object " + hit.collider.name + " not instantiated");
+                Debug.Log("Clutter in the way. Object " + toSpawn.name + " not instantiated");
                 return;
             }
 
