@@ -13,7 +13,7 @@ GameObject:
   - 23: {fileID: 2399100}
   m_Layer: 8
   m_Name: Green Cube
-  m_TagString: Clutter
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

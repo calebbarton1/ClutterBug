@@ -13,7 +13,7 @@ GameObject:
   - 23: {fileID: 2357494}
   m_Layer: 8
   m_Name: Yellow Sphere
-  m_TagString: Clutter
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

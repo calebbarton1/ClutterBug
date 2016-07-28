@@ -96,7 +96,7 @@ GameObject:
   - 33: {fileID: 5199365}
   - 65: {fileID: 5199364}
   - 23: {fileID: 5199363}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Floor (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,14 +191,12 @@ MonoBehaviour:
   SpawnObjects: 0
   DeleteObjects: 0
   shape: 0
-  Additive: 1
-  numberToSpawn: 100
-  degreeLimit: 30
+  additive: 0
+  allowOverlap: 1
+  numberToSpawn: 50
+  degreeLimit: 45
   goList:
-  - {fileID: 137058, guid: 9bc2e815de0af5d408904845c2425d82, type: 2}
   - {fileID: 125040, guid: df7edf47cafb4bd4ea7a02bd6212f20b, type: 2}
-  - {fileID: 168416, guid: 6709f1787d1686c409a5661ee5b7914b, type: 2}
-  - {fileID: 149180, guid: 95cb5e59bffc6644fa1ddc77d0eb4761, type: 2}
 --- !u!4 &349854970
 Transform:
   m_ObjectHideFlags: 0
@@ -206,8 +204,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 349854968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14, y: 20.26, z: 0.75}
-  m_LocalScale: {x: 28.527403, y: 28.527405, z: 21.038979}
+  m_LocalPosition: {x: -22.99, y: 7.24, z: 0.75}
+  m_LocalScale: {x: 13.66585, y: 4.875053, z: 10.078577}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -223,7 +221,7 @@ GameObject:
   - 33: {fileID: 448026397}
   - 65: {fileID: 448026396}
   - 23: {fileID: 448026395}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Floor (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -299,7 +297,7 @@ GameObject:
   - 33: {fileID: 632199300}
   - 65: {fileID: 632199299}
   - 23: {fileID: 632199298}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Floor (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +373,7 @@ GameObject:
   - 33: {fileID: 931054712}
   - 65: {fileID: 931054711}
   - 23: {fileID: 931054710}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Floor (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -600,7 +598,7 @@ GameObject:
   - 33: {fileID: 1042177749}
   - 65: {fileID: 1042177748}
   - 23: {fileID: 1042177747}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Floor (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -676,7 +674,7 @@ GameObject:
   - 33: {fileID: 1226113879}
   - 65: {fileID: 1226113878}
   - 23: {fileID: 1226113877}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Floor (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -752,7 +750,7 @@ GameObject:
   - 33: {fileID: 1413440618}
   - 65: {fileID: 1413440617}
   - 23: {fileID: 1413440616}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -812,7 +810,7 @@ Transform:
   m_GameObject: {fileID: 1413440615}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.66, z: 0.16}
-  m_LocalScale: {x: 29.66919, y: 1, z: 24.545206}
+  m_LocalScale: {x: 99.310814, y: 1, z: 24.545206}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -828,7 +826,7 @@ GameObject:
   - 33: {fileID: 1452302931}
   - 65: {fileID: 1452302930}
   - 23: {fileID: 1452302929}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Floor (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -904,7 +902,7 @@ GameObject:
   - 33: {fileID: 1679306279}
   - 65: {fileID: 1679306278}
   - 23: {fileID: 1679306277}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Floor (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
