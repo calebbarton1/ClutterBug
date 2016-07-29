@@ -43,9 +43,15 @@ MonoBehaviour:
   SpawnObjects: 0
   DeleteObjects: 0
   shape: 0
-  Additive: 0
+  additive: 0
+  allowOverlap: 0
+  angleLimit: 45
+  objX: 0
+  objY: 0
+  objZ: 0
+  rotationOverride: {x: 0, y: 0, z: 0}
+  objectScale: {x: 1, y: 1, z: 1}
   numberToSpawn: 5
-  degreeLimit: 45
   goList: []
 --- !u!1001 &100100000
 Prefab:

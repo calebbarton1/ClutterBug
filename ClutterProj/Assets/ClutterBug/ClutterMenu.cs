@@ -9,14 +9,10 @@ public class ClutterMenu : MonoBehaviour {
 
     static private GameObject node;
 
-    public void Awake()
-    {
-    }
-
-    [MenuItem("Clutter/CreateNode")]
+    [MenuItem("ClutterBug/CreateNode")]
     static public void CreateNode()
     {
-        node = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/ClutterNode.prefab", typeof(GameObject));
+        node = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/ClutterBug/ClutterNode.prefab", typeof(GameObject));
         Object clone = Instantiate(node, Vector3.zero, Quaternion.identity);
         clone.name = node.name;
     }

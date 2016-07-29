@@ -1,0 +1,1 @@
+Clutter objects require a collider and need to be on a layer named "Clutter" for the software to work properly.

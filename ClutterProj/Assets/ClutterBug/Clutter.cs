@@ -42,13 +42,30 @@ public class Clutter : MonoBehaviour {
     [Tooltip("Adds clutter per click instead of rerolling")]
     public bool additive = false;
 
+    [Tooltip("If enabled, clutter can overlap each other.")]
     public bool allowOverlap = false;
+
+    [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
+    public int angleLimit = 45;
+
+    [Header("Randomise Rotation")]
+    public bool objX;
+    public bool objY, objZ;
+
+    [Space(10)]
+    
+    [Tooltip("Overrides prefab rotation and random rotation")]
+    public Vector3 rotationOverride;
+
+    [Space(10)]
+
+    public Vector3 objectScale = new Vector3(1,1,1);
+
+    [Space(10)]
+
 
     [Tooltip("Number of clutter created per click")]
     public int numberToSpawn;
-
-    [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
-    public int degreeLimit = 45;
 
     [Space(5)]
 
@@ -61,12 +78,6 @@ public class Clutter : MonoBehaviour {
     void Start() {
 
     }
-
-    // Update is called once per frame
-   // void Update()
-   // {
-   //     ShapeColliders();
-   // }
 
 
     public void OnDrawGizmos()//currently just tells me what the shape of the transform is in the editor
@@ -154,53 +165,37 @@ public class Clutter : MonoBehaviour {
 
     public void InstantiateObject(Vector3 _loc)//instantiates object with given location
     {        
-        int breakLimit = 0;
+        //int breakLimit = 0;
 
         //gets random object
         GameObject toSpawn;
         toSpawn = RandomObject();
 
-        Renderer toSpawnRender = toSpawn.GetComponent<Renderer>();//caching render of prefab we want to spawn
+        Collider toSpawnCol = toSpawn.GetComponent<Collider>();//caching render of prefab we want to spawn
 
         _loc = transform.TransformPoint(_loc * .45f); //takes transform in world space and modifies it using random value
 
-        /*
-        //system will use the location, then raycast down to place the object
-        while (!Physics.Linecast(_loc, Vector3.down * 50))//will check if cast goes through floor, and keep moving the position up until a solid ground is found
-        {
-            _loc.y += 10;
-            ++breakLimit;
-
-            Debug.Log("moving object up");
-
-            if (breakLimit > 5)//will break function if there is no ground
-            {
-                Debug.Log("No collider found. Object not instantiated.");
-                return;
-            }
-        }
-        */
-
         RaycastHit hit;
-        bool cast;       
+        bool cast;
 
+        
         if (allowOverlap)
         {
             int mask = LayerMask.NameToLayer("Clutter");//grab layer of clutter
             mask = 1 << mask;//bitshift it
             mask = ~mask;//we want to cast against everything else but the clutter
 
-            cast = Physics.SphereCast(_loc, toSpawnRender.bounds.size.x * .5f, Vector3.down, out hit, transform.localScale.y, mask);
+            cast = Physics.SphereCast(_loc, toSpawnCol.bounds.size.x * .5f, Vector3.down, out hit, transform.localScale.y, mask);
         }
 
 
         else
-            cast = Physics.SphereCast(_loc, toSpawnRender.bounds.size.x * .5f, Vector3.down, out hit, transform.localScale.y);
+            cast = Physics.SphereCast(_loc, toSpawnCol.bounds.size.x * .5f, Vector3.down, out hit, transform.localScale.y);
 
 
         if (cast)
         {
-            if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - degreeLimit))//determines if an object will spawn depending on the angle of the collider below it. Set by user.
+            if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it. Set by user.
             {
                 Debug.Log("Angle too sharp. Object " + toSpawn.name + " not instantiated");
                 return;
@@ -213,14 +208,67 @@ public class Clutter : MonoBehaviour {
                 return;
             }
 
+
+            Vector3 tempRot = SetRotation();
+
             GameObject tempObj;
-            tempObj = (GameObject)Instantiate(toSpawn, new Vector3(hit.point.x, hit.point.y + (toSpawnRender.bounds.size.y * .5f), hit.point.z), Quaternion.identity);//instantiate objects on surface of raycast. The getcomponent is nasty, but I can't see a way around it.
+            tempObj = (GameObject)Instantiate(toSpawn, new Vector3(hit.point.x, hit.point.y + (toSpawnCol.bounds.size.y * .5f), hit.point.z), Quaternion.Euler(tempRot));//instantiate objects on surface of raycast. The getcomponent is nasty, but I can't see a way around it.
 
             if (!nodeParent)
                 nodeParent = new GameObject("clutterParent");
 
-            tempObj.name = toSpawn.name;//get rid of (clone)
+            tempObj.name = toSpawn.name;//get rid of (clone) in name
+                        
+            tempObj.transform.localScale = objectScale;
             tempObj.transform.parent = nodeParent.transform;
         }
+    }
+
+    public Vector3 SetRotation()
+    {
+        Vector3 toReturn = new Vector3(0, 0, 0);
+
+
+        if (rotationOverride != Vector3.zero) //if there is a value in rot override                
+        {
+            //x
+            if (rotationOverride.x == 0 && objX)//if x is 0 and the bool is checked, return a random value
+                toReturn.x = Random.Range(0, 360);
+
+            else if (rotationOverride.x != 0) //otherwise use given value
+                toReturn.x = rotationOverride.x;
+
+            //y
+            if (rotationOverride.y == 0 && objY)
+                toReturn.y = Random.Range(0, 360);
+
+            else if (rotationOverride.y != 0)
+                toReturn.y = rotationOverride.y;
+
+            //z
+            if (rotationOverride.z == 0 && objZ)
+                toReturn.z = Random.Range(0, 360);
+
+            else if (rotationOverride.z != 0)
+                toReturn.z = rotationOverride.z;
+
+
+            return toReturn;
+        }
+
+        else //if the override is zero, just use the random bools
+        {
+            if (objX)
+                toReturn.x = Random.Range(0, 360);
+
+            if (objY)
+                toReturn.y = Random.Range(0, 360);
+
+            if (objZ)
+                toReturn.z = Random.Range(0, 360);
+
+            return toReturn;
+        }
+                          
     }
 }
