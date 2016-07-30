@@ -29,7 +29,7 @@ public class Clutter : MonoBehaviour {
 
     [Space(10)]
 
-    [InspectorButton("DeleteObject")]
+    [InspectorButton("DeleteClutter")]
     public bool DeleteObjects;
 
     [Space(10)]
@@ -45,24 +45,28 @@ public class Clutter : MonoBehaviour {
     [Tooltip("If enabled, clutter can overlap each other.")]
     public bool allowOverlap = false;
 
+    public bool faceNormal = false;
+
     [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
+    [Range(0,89)]
     public int angleLimit = 45;
 
+    [Tooltip("Randomised rotation value. Is overriden by rotation override.")]
     [Header("Randomise Rotation")]
     public bool objX;
     public bool objY, objZ;
 
     [Space(10)]
     
-    [Tooltip("Overrides prefab rotation and random rotation")]
+    [Tooltip("Overrides prefab rotation and random rotation. Leave at zero to use prefab setting.")]
     public Vector3 rotationOverride;
 
     [Space(10)]
 
-    public Vector3 objectScale = new Vector3(1,1,1);
+    [Tooltip("Overrides prefab scale. Leave at zero to use prefab setting.")]
+    public Vector3 objectScale = Vector3.zero;
 
     [Space(10)]
-
 
     [Tooltip("Number of clutter created per click")]
     public int numberToSpawn;
@@ -75,10 +79,12 @@ public class Clutter : MonoBehaviour {
 
     private GameObject nodeParent;
 
-    void Start() {
 
+    public void Awake ()
+    {
+        //so that the parent is remembered if the game is run.
+        nodeParent = GameObject.Find("clutterParent");
     }
-
 
     public void OnDrawGizmos()//currently just tells me what the shape of the transform is in the editor
     {
@@ -92,7 +98,7 @@ public class Clutter : MonoBehaviour {
                 break;
 
             case colliderMenu.Sphere:
-                Gizmos.DrawSphere(transform.position, transform.localScale.x * .5f);
+                Gizmos.DrawSphere(transform.position, transform.localScale.x * .5f);//this means that spheres scaled by z aren't shown on scene. need to change
                 Gizmos.color = new Color(0, 0, 0, .75f);
                 Gizmos.DrawWireSphere(transform.position, transform.localScale.x * .5f);
                 break;
@@ -107,7 +113,7 @@ public class Clutter : MonoBehaviour {
     private void SpawnObjectsInArea()
     {
         if (!additive)
-            DeleteObject(); //Delete previously placed objects
+            DeleteClutter(); //Delete previously placed objects
 
         if (goList.Count != 0)
         {
@@ -117,7 +123,7 @@ public class Clutter : MonoBehaviour {
 
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
-                        Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f));//random x,y,z in a box
+                        Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f));//random x and z on top of box
                         InstantiateObject(spawnPos);
                     }
 
@@ -143,11 +149,12 @@ public class Clutter : MonoBehaviour {
         else
         {
             Debug.LogWarning("No Objects in List!");
+            return;
         }
     }
     
 
-    private void DeleteObject()
+    private void DeleteClutter()
     {
         DestroyImmediate(nodeParent);
     }
@@ -165,63 +172,92 @@ public class Clutter : MonoBehaviour {
 
     public void InstantiateObject(Vector3 _loc)//instantiates object with given location
     {        
-        //int breakLimit = 0;
-
         //gets random object
         GameObject toSpawn;
-        toSpawn = RandomObject();
+        toSpawn = RandomObject(); 
 
-        Collider toSpawnCol = toSpawn.GetComponent<Collider>();//caching render of prefab we want to spawn
+        _loc = transform.TransformPoint(_loc * .5f); //takes transform in world space and modifies it using random value
 
-        _loc = transform.TransformPoint(_loc * .45f); //takes transform in world space and modifies it using random value
+
+        GameObject tempObj;
+        tempObj = (GameObject)Instantiate(toSpawn, _loc, Quaternion.identity);//instantiates at top of gizmo  
+        
+        if (!nodeParent)
+            nodeParent = new GameObject("clutterParent");
+
+        //add new object to an empty parent
+        tempObj.transform.parent = nodeParent.transform;
+
+        //set the rotation of the object if there is an override
+        Vector3 tempRot = SetRotation();
+        tempObj.transform.rotation = Quaternion.Euler(tempRot);
+
+        //set the scale of the object
+        if (objectScale != Vector3.zero)
+            tempObj.transform.localScale = objectScale;
+
+        //get rid of "(clone)" in the name
+        tempObj.name = toSpawn.name; 
 
         RaycastHit hit;
         bool cast;
 
-        
+        //cache object layer
+        int tempLayer = tempObj.layer;
+
+        //put the object on ignoreraycast, just so the spherecast can't accidentally hit the object we're trying to cast for
+        tempObj.layer = 2;
+
         if (allowOverlap)
         {
             int mask = LayerMask.NameToLayer("Clutter");//grab layer of clutter
             mask = 1 << mask;//bitshift it
             mask = ~mask;//we want to cast against everything else but the clutter
 
-            cast = Physics.SphereCast(_loc, toSpawnCol.bounds.size.x * .5f, Vector3.down, out hit, transform.localScale.y, mask);
+            cast = Physics.SphereCast(new Vector3(_loc.x,_loc.y + tempObj.transform.localScale.y, _loc.z), tempObj.transform.localScale.x, Vector3.down, out hit, transform.localScale.y, mask);//the new vector is so the spherecast doesn't start inside of a clutter in the case of very large objects
         }
 
 
         else
-            cast = Physics.SphereCast(_loc, toSpawnCol.bounds.size.x * .5f, Vector3.down, out hit, transform.localScale.y);
+            cast = Physics.SphereCast(new Vector3(_loc.x, _loc.y + tempObj.transform.localScale.y, _loc.z), tempObj.transform.localScale.x, Vector3.down, out hit, transform.localScale.y);
 
 
-        if (cast)
+        //if raycast doesn't hit anything break out of function.
+        if (!cast)
+        {
+            DestroyImmediate(tempObj);
+            return;
+        }
+
+        //do the thing
+        else
         {
             if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it. Set by user.
             {
-                Debug.Log("Angle too sharp. Object " + toSpawn.name + " not instantiated");
+                Debug.Log("Angle too sharp. Object " + tempObj.name + " not instantiated");
+                DestroyImmediate(tempObj);
                 return;
             }
 
             
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Clutter") && !allowOverlap)//if the user chooses, objects will not overlap
             {
-                Debug.Log("Clutter in the way. Object " + toSpawn.name + " not instantiated");
+                Debug.Log("Clutter in the way. Object " + tempObj.name + " not instantiated");
+                DestroyImmediate(tempObj);
                 return;
             }
 
+            //move object to point
+            tempObj.transform.position = hit.point;
 
-            Vector3 tempRot = SetRotation();
-
-            GameObject tempObj;
-            tempObj = (GameObject)Instantiate(toSpawn, new Vector3(hit.point.x, hit.point.y + (toSpawnCol.bounds.size.y * .5f), hit.point.z), Quaternion.Euler(tempRot));//instantiate objects on surface of raycast. The getcomponent is nasty, but I can't see a way around it.
-
-            if (!nodeParent)
-                nodeParent = new GameObject("clutterParent");
-
-            tempObj.name = toSpawn.name;//get rid of (clone) in name
-                        
-            tempObj.transform.localScale = objectScale;
-            tempObj.transform.parent = nodeParent.transform;
+            //offset the hit point so the object is on the surface
+            Vector3 tempPos = tempObj.transform.position;
+            tempPos.y += tempObj.transform.lossyScale.y * .5f;
+            tempObj.transform.position = tempPos;
         }
+
+        //revert game object to original layer
+        tempObj.layer = tempLayer;
     }
 
     public Vector3 SetRotation()
