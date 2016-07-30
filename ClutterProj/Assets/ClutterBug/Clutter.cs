@@ -45,6 +45,9 @@ public class Clutter : MonoBehaviour {
     [Tooltip("If enabled, clutter can overlap each other.")]
     public bool allowOverlap = false;
 
+    [Space(10)]
+
+    [Tooltip("Object will face surface normal. Overrides all rotation (currently)")]
     public bool faceNormal = false;
 
     [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
@@ -178,10 +181,9 @@ public class Clutter : MonoBehaviour {
 
         _loc = transform.TransformPoint(_loc * .5f); //takes transform in world space and modifies it using random value
 
-
         GameObject tempObj;
-        tempObj = (GameObject)Instantiate(toSpawn, _loc, Quaternion.identity);//instantiates at top of gizmo  
-        
+        tempObj = (GameObject)Instantiate(toSpawn, new Vector3(_loc.x, _loc.y + 100, _loc.z), Quaternion.identity);//instantiates at top of gizmo  
+
         if (!nodeParent)
             nodeParent = new GameObject("clutterParent");
 
@@ -202,24 +204,18 @@ public class Clutter : MonoBehaviour {
         RaycastHit hit;
         bool cast;
 
-        //cache object layer
-        int tempLayer = tempObj.layer;
-
-        //put the object on ignoreraycast, just so the spherecast can't accidentally hit the object we're trying to cast for
-        tempObj.layer = 2;
-
         if (allowOverlap)
         {
             int mask = LayerMask.NameToLayer("Clutter");//grab layer of clutter
             mask = 1 << mask;//bitshift it
             mask = ~mask;//we want to cast against everything else but the clutter
 
-            cast = Physics.SphereCast(new Vector3(_loc.x,_loc.y + tempObj.transform.localScale.y, _loc.z), tempObj.transform.localScale.x, Vector3.down, out hit, transform.localScale.y, mask);//the new vector is so the spherecast doesn't start inside of a clutter in the case of very large objects
+            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, transform.localScale.y, mask);//the new vector is so the spherecast doesn't start inside of a clutter in the case of very large objects
         }
 
 
         else
-            cast = Physics.SphereCast(new Vector3(_loc.x, _loc.y + tempObj.transform.localScale.y, _loc.z), tempObj.transform.localScale.x, Vector3.down, out hit, transform.localScale.y);
+            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, transform.localScale.y);
 
 
         //if raycast doesn't hit anything break out of function.
@@ -232,6 +228,7 @@ public class Clutter : MonoBehaviour {
         //do the thing
         else
         {
+           
             if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it. Set by user.
             {
                 Debug.Log("Angle too sharp. Object " + tempObj.name + " not instantiated");
@@ -252,12 +249,14 @@ public class Clutter : MonoBehaviour {
 
             //offset the hit point so the object is on the surface
             Vector3 tempPos = tempObj.transform.position;
-            tempPos.y += tempObj.transform.lossyScale.y * .5f;
+            tempPos.y += tempObj.transform.localScale.y * .5f;
             tempObj.transform.position = tempPos;
+            
+            if (faceNormal)
+            {
+                tempObj.transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+            }
         }
-
-        //revert game object to original layer
-        tempObj.layer = tempLayer;
     }
 
     public Vector3 SetRotation()
