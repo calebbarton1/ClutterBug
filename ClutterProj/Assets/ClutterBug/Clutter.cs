@@ -86,7 +86,7 @@ public class Clutter : MonoBehaviour {
     public void Awake ()
     {
         //so that the parent is remembered if the game is run.
-        nodeParent = GameObject.Find("clutterParent");
+        //nodeParent = GameObject.Find("clutterParent");
     }
 
     public void OnDrawGizmos()//currently just tells me what the shape of the transform is in the editor
@@ -182,24 +182,9 @@ public class Clutter : MonoBehaviour {
         _loc = transform.TransformPoint(_loc * .5f); //takes transform in world space and modifies it using random value
 
         GameObject tempObj;
-        tempObj = (GameObject)Instantiate(toSpawn, new Vector3(_loc.x, _loc.y + 100, _loc.z), Quaternion.identity);//instantiates at top of gizmo  
+        tempObj = (GameObject)Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity);//get object into world
 
-        if (!nodeParent)
-            nodeParent = new GameObject("clutterParent");
-
-        //add new object to an empty parent
-        tempObj.transform.parent = nodeParent.transform;
-
-        //set the rotation of the object if there is an override
-        Vector3 tempRot = SetRotation();
-        tempObj.transform.rotation = Quaternion.Euler(tempRot);
-
-        //set the scale of the object
-        if (objectScale != Vector3.zero)
-            tempObj.transform.localScale = objectScale;
-
-        //get rid of "(clone)" in the name
-        tempObj.name = toSpawn.name; 
+        tempObj = SetValues(tempObj); 
 
         RaycastHit hit;
         bool cast;
@@ -221,6 +206,7 @@ public class Clutter : MonoBehaviour {
         //if raycast doesn't hit anything break out of function.
         if (!cast)
         {
+            Debug.Log("Collider not found in bounds of node. Object " + tempObj.name + " not instantiated");
             DestroyImmediate(tempObj);
             return;
         }
@@ -254,7 +240,7 @@ public class Clutter : MonoBehaviour {
             
             if (faceNormal)
             {
-                tempObj.transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+                tempObj.transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;//placeholder
             }
         }
     }
@@ -305,5 +291,27 @@ public class Clutter : MonoBehaviour {
             return toReturn;
         }
                           
+    }
+
+    public GameObject SetValues(GameObject go)
+    {
+        if (!nodeParent)
+            nodeParent = new GameObject("clutterParent");
+
+        //add new object to an empty parent
+        go.transform.parent = nodeParent.transform;
+
+        //set the rotation of the object if there is an override
+        Vector3 tempRot = SetRotation();
+        go.transform.rotation = Quaternion.Euler(tempRot);
+
+        //set the scale of the object
+        if (objectScale != Vector3.zero)
+            go.transform.localScale = objectScale;
+
+        //get rid of "(clone)" in the name
+        go.name = go.name;
+
+        return go;
     }
 }
