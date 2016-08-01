@@ -101,9 +101,11 @@ public class Clutter : MonoBehaviour {
                 break;
 
             case colliderMenu.Sphere:
-                Gizmos.DrawSphere(transform.position, transform.localScale.x * .5f);//this means that spheres scaled by z aren't shown on scene. need to change
+                Gizmos.matrix = Matrix4x4.TRS(transform.position, Quaternion.identity, transform.localScale);
+                Gizmos.DrawSphere(Vector3.zero, 1);//this means that spheres scaled by z aren't shown on scene. need to change
                 Gizmos.color = new Color(0, 0, 0, .75f);
-                Gizmos.DrawWireSphere(transform.position, transform.localScale.x * .5f);
+                Gizmos.DrawWireSphere(Vector3.zero, 1);
+                Gizmos.matrix = Matrix4x4.identity;
                 break;
 
             default:
@@ -127,7 +129,7 @@ public class Clutter : MonoBehaviour {
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
                         Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f));//random x and z on top of box
-                        InstantiateObject(spawnPos);
+                        InstantiateObject(spawnPos,.45f);
                     }
 
                     break;
@@ -138,7 +140,7 @@ public class Clutter : MonoBehaviour {
                     {
                         Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
                         spawnPos.y = 1;
-                        InstantiateObject(spawnPos);
+                        InstantiateObject(spawnPos,1);
                     }
 
                     break;
@@ -173,13 +175,13 @@ public class Clutter : MonoBehaviour {
         return go;        
     }
 
-    public void InstantiateObject(Vector3 _loc)//instantiates object with given location
+    public void InstantiateObject(Vector3 _loc, float mult)//instantiates object with given location
     {        
         //gets random object
         GameObject toSpawn;
         toSpawn = RandomObject(); 
 
-        _loc = transform.TransformPoint(_loc * .5f); //takes transform in world space and modifies it using random value
+        _loc = transform.TransformPoint(_loc * mult); //takes transform in world space and modifies it using random value
 
         GameObject tempObj;
         tempObj = (GameObject)Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity);//get object into world
