@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3327230}
   - 136: {fileID: 13603718}
   - 23: {fileID: 2314964}
+  - 114: {fileID: 114000014055854032}
   m_Layer: 8
   m_Name: Blue Capsule
   m_TagString: Untagged
@@ -40,17 +41,20 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: da59e7f96d5e3834584cecf7b0b343bd, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
   m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_SelectedWireframeHidden: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -88,3 +92,30 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 124542}
   m_IsPrefabParent: 1
+--- !u!114 &114000014055854032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 124542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9600e458eec7f4b49a494d91e0f85bd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowOverlap: 0
+  faceNormal: 0
+  dist: 2
+  angleLimit: 45
+  objX: 0
+  objY: 0
+  objZ: 0
+  rotationOverride: {x: 0, y: 0, z: 0}
+  scaleX: {x: 0, y: 0}
+  scaleY: {x: 0, y: 0}
+  scaleZ: {x: 0, y: 0}
+  scaleOverride: {x: 0, y: 0, z: 0}
+  numberToSpawn: 3
+  childClutterList:
+  - {fileID: 137058, guid: 9bc2e815de0af5d408904845c2425d82, type: 2}
+  parent: {fileID: 0}

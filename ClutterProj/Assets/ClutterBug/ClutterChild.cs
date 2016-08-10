@@ -8,50 +8,21 @@ using UnityEditor;
 #endif
 
 [ExecuteInEditMode]
-public class Clutter : MonoBehaviour {
+public class ClutterChild : MonoBehaviour {
 
-    //Made by Caleb
-
-    //enums for collider selection in inspector
-    public enum colliderMenu
-    {
-        Box,
-        Sphere,
-    }
-
-    //buttons for generating objects
-    //credit to "zaikman" for the script
-
-    [Space(10)]
-
-    [InspectorButton("SpawnObjectsInArea")]//Calls this function
-    public bool SpawnObjects;//makes a button with this bool
-
-    [Space(10)]
-
-    [InspectorButton("DeleteClutter")]
-    public bool DeleteObjects;
-
-    [Space(10)]
-
-
-    //initialise enum and colliders
-    [Tooltip("The shape of the area where objects are placed")]
-    public colliderMenu shape = colliderMenu.Box;
-
-    [Tooltip("Adds clutter per click instead of rerolling")]
-    public bool additive = false;
+#if UNITY_EDITOR
 
     [Tooltip("If enabled, clutter can overlap each other.")]
     public bool allowOverlap = false;
-
-    [Space(10)]
-
+    
     [Tooltip("Object will face surface normal. Overrides all rotation (currently)")]
     public bool faceNormal = false;
 
+    [Tooltip("Distance from the clutter to spawn")]
+    public float dist;
+
     [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
-    [Range(0,89)]
+    [Range(0, 89)]
     public int angleLimit = 45;
 
     [Tooltip("Randomised rotation value. Is overriden by rotation override.")]
@@ -60,7 +31,7 @@ public class Clutter : MonoBehaviour {
     public bool objY, objZ;
 
     [Space(10)]
-    
+
     [Tooltip("Overrides prefab rotation and random rotation. Leave at zero to use prefab setting.")]
     public Vector3 rotationOverride;
 
@@ -84,94 +55,38 @@ public class Clutter : MonoBehaviour {
 
     [Space(5)]
 
-    [Tooltip("Objects to be created as clutter")]
-    public List<GameObject> goList;//temp
-    
+    [Tooltip("Objects to spawn around clutter")]
+    public List<GameObject> childClutterList;
 
-    private GameObject nodeParent;
+    [HideInInspector]
+    public Transform parent;
 
+    private int recursiveCounter;
 
-    public void Awake ()
+    public void Recursive(int count)
     {
-        //so that the parent is remembered if the game is run.
-        //nodeParent = GameObject.Find("clutterParent");
+        recursiveCounter += count; 
     }
 
-    public void OnDrawGizmos()//currently just tells me what the shape of the transform is in the editor
+    public void SpawnObjectsInArea(Transform toParent)
     {
-        Gizmos.color = new Color(0.50f, 1.0f, 1.0f, 0.5f);
-        switch (shape)
+        if (recursiveCounter != 50)
         {
-            case colliderMenu.Box:
-                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);
-                Gizmos.DrawCube(Vector3.zero, Vector3.one);
-                Gizmos.color = new Color(0, 0, 0, .75f);
-                Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-                Gizmos.matrix = Matrix4x4.identity;
-                break;
+            parent = toParent;
 
-            case colliderMenu.Sphere:
-                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);
-                Gizmos.DrawSphere(Vector3.zero, 1);
-                Gizmos.color = new Color(0, 0, 0, .75f);
-                Gizmos.DrawWireSphere(Vector3.zero, 1);
-                Gizmos.matrix = Matrix4x4.identity;
-                break;
-
-            default:
-                break;
-        }
-    }
-
-   
-
-    private void SpawnObjectsInArea()
-    {
-        if (!additive)
-            DeleteClutter(); //Delete previously placed objects
-
-        if (goList.Count != 0)
-        {
-            switch (shape)
+            if (childClutterList.Count != 0)
             {
-                case colliderMenu.Box:
-
-                    for (int index = 0; index < numberToSpawn; ++index)
-                    {
-                        Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f));//random x and z on top of box
-                        InstantiateObject(spawnPos,.45f);
-                    }
-
-                    break;
-
-                case colliderMenu.Sphere:
-
-                    for (int index = 0; index < numberToSpawn; ++index)
-                    {
-                        Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
-                        spawnPos.y = 1;
-                        InstantiateObject(spawnPos,1);
-                    }
-
-                    break;
-
-                default:
-                    break;
+                for (int index = 0; index < numberToSpawn; ++index)
+                {
+                    Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
+                    spawnPos.y = 1;
+                    InstantiateObject(spawnPos, 1);
+                }
             }
-            
         }
 
         else
-        {
-            Debug.LogWarning("No Objects in List!");
-            return;
-        }
-    }
-    
-
-    private void DeleteClutter()
-    {
-        DestroyImmediate(nodeParent);
+            Debug.LogWarning("Too many recursive loops. Breaking Function.");
     }
 
     public GameObject RandomObject()//temp
@@ -179,19 +94,19 @@ public class Clutter : MonoBehaviour {
         GameObject go;
         int objIndex;
 
-        objIndex = Random.Range(0, goList.Count);
-        go = goList[objIndex];
+        objIndex = Random.Range(0, childClutterList.Count);
+        go = childClutterList[objIndex];
 
-        return go;        
+        return go;
     }
 
     public void InstantiateObject(Vector3 _loc, float mult)//instantiates object with given location
-    {        
+    {
         //gets random object
         GameObject toSpawn;
-        toSpawn = RandomObject(); 
+        toSpawn = RandomObject();
 
-        _loc = transform.TransformPoint(_loc * mult); //takes transform in world space and modifies it using random value
+        _loc = transform.TransformPoint(_loc * mult * dist); //takes transform in world space and modifies it using random value
 
         GameObject tempObj;
         tempObj = (GameObject)Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity);//get object into world
@@ -209,12 +124,12 @@ public class Clutter : MonoBehaviour {
             mask = 1 << mask;//bitshift it
             mask = ~mask;//we want to cast against everything else but the clutter
 
-            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, transform.localScale.y, mask);//the new vector is so the spherecast doesn't start inside of a clutter in the case of very large objects
+            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, 20, mask);//the new vector is so the spherecast doesn't start inside of a clutter in the case of very large objects
         }
 
 
         else
-            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, transform.localScale.y);
+            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, 20);
 
 
         //if raycast doesn't hit anything break out of function.
@@ -228,7 +143,7 @@ public class Clutter : MonoBehaviour {
         //do the thing
         else
         {
-           
+
             if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it. Set by user.
             {
                 Debug.Log("Angle too sharp. Object " + tempObj.name + " not instantiated");
@@ -236,7 +151,7 @@ public class Clutter : MonoBehaviour {
                 return;
             }
 
-            
+
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Clutter") && !allowOverlap)//if the user chooses, objects will not overlap
             {
                 Debug.Log("Clutter in the way. Object " + tempObj.name + " not instantiated");
@@ -251,8 +166,8 @@ public class Clutter : MonoBehaviour {
             Vector3 tempPos = tempObj.transform.position;
             tempPos.y += tempObj.transform.localScale.y * .5f;
             tempObj.transform.position = tempPos;
-            
-            if (faceNormal)//temp. currently overrides all other rotation values
+
+            if (faceNormal)
             {
                 tempObj.transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;//placeholder
             }
@@ -262,18 +177,15 @@ public class Clutter : MonoBehaviour {
         if (tempObj.GetComponent<ClutterChild>() != null)
         {
             tempObj.SendMessage("Recursive", 1);
-            tempObj.SendMessage("SpawnObjectsInArea", tempObj.transform);
+            tempObj.SendMessage("SpawnObjectsInArea", this.transform);
         }
     }
 
 
     public GameObject SetTransform(GameObject go)
     {
-        if (!nodeParent)
-            nodeParent = new GameObject("clutterParent");
-
         //add new object to an empty parent
-        go.transform.parent = nodeParent.transform;
+        go.transform.parent = parent;
 
         //set the rotation of the object if there is an override
         Vector3 tempRot = SetRotation();
@@ -281,7 +193,7 @@ public class Clutter : MonoBehaviour {
 
         //set the scale of the object
         go.transform.localScale = SetScale(go);
-        
+
         return go;
     }
 
@@ -335,7 +247,7 @@ public class Clutter : MonoBehaviour {
 
     public Vector3 SetScale(GameObject go2)
     {
-        Vector3 toReturn = new Vector3(0,0,0);
+        Vector3 toReturn = new Vector3(0, 0, 0);
 
 
         if (scaleOverride != Vector3.zero) //if there is a value in rot override                
@@ -384,4 +296,5 @@ public class Clutter : MonoBehaviour {
             return toReturn;
         }
     }
+#endif
 }
