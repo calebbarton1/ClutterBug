@@ -9,6 +9,8 @@ public class ClutterMenu : MonoBehaviour {
 
     static private GameObject node;
 
+#if UNITY_EDITOR
+
     [MenuItem("ClutterBug/CreateNode")]
     static public void CreateNode()
     {
@@ -16,4 +18,5 @@ public class ClutterMenu : MonoBehaviour {
         Object clone = Instantiate(node, Vector3.zero, Quaternion.identity);
         clone.name = node.name;
     }
+#endif
 }

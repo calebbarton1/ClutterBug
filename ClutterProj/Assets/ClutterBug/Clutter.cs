@@ -66,8 +66,16 @@ public class Clutter : MonoBehaviour {
 
     [Space(10)]
 
+    //temporary. will build custom inspector later for two varaible inputs
+    [Tooltip("Will scale objects between two variables.")]
+    [Header("Random Scale")]
+    public Vector2 scaleX;
+    public Vector2 scaleY, scaleZ;
+
+    [Space(10)]
+
     [Tooltip("Overrides prefab scale. Leave at zero to use prefab setting.")]
-    public Vector3 objectScale = Vector3.zero;
+    public Vector3 scaleOverride = Vector3.zero;
 
     [Space(10)]
 
@@ -95,14 +103,16 @@ public class Clutter : MonoBehaviour {
         switch (shape)
         {
             case colliderMenu.Box:
-                Gizmos.DrawCube(transform.position, transform.localScale);
+                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);
+                Gizmos.DrawCube(Vector3.zero, Vector3.one);
                 Gizmos.color = new Color(0, 0, 0, .75f);
-                Gizmos.DrawWireCube(transform.position, transform.localScale);
+                Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+                Gizmos.matrix = Matrix4x4.identity;
                 break;
 
             case colliderMenu.Sphere:
-                Gizmos.matrix = Matrix4x4.TRS(transform.position, Quaternion.identity, transform.localScale);
-                Gizmos.DrawSphere(Vector3.zero, 1);//this means that spheres scaled by z aren't shown on scene. need to change
+                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);
+                Gizmos.DrawSphere(Vector3.zero, 1);
                 Gizmos.color = new Color(0, 0, 0, .75f);
                 Gizmos.DrawWireSphere(Vector3.zero, 1);
                 Gizmos.matrix = Matrix4x4.identity;
@@ -186,7 +196,7 @@ public class Clutter : MonoBehaviour {
         GameObject tempObj;
         tempObj = (GameObject)Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity);//get object into world
 
-        tempObj = SetValues(tempObj); 
+        tempObj = SetTransform(tempObj); 
 
         RaycastHit hit;
         bool cast;
@@ -247,6 +257,29 @@ public class Clutter : MonoBehaviour {
         }
     }
 
+
+    public GameObject SetTransform(GameObject go)
+    {
+        if (!nodeParent)
+            nodeParent = new GameObject("clutterParent");
+
+        //add new object to an empty parent
+        go.transform.parent = nodeParent.transform;
+
+        //set the rotation of the object if there is an override
+        Vector3 tempRot = SetRotation();
+        go.transform.rotation = Quaternion.Euler(tempRot);
+
+        //set the scale of the object
+        go.transform.localScale = SetScale(go);
+
+
+        //get rid of "(clone)" in the name
+        go.name = go.name;
+
+        return go;
+    }
+
     public Vector3 SetRotation()
     {
         Vector3 toReturn = new Vector3(0, 0, 0);
@@ -279,7 +312,7 @@ public class Clutter : MonoBehaviour {
             return toReturn;
         }
 
-        else //if the override is zero, just use the random bools
+        else//if the override is zero, just use the random bools
         {
             if (objX)
                 toReturn.x = Random.Range(0, 360);
@@ -292,28 +325,58 @@ public class Clutter : MonoBehaviour {
 
             return toReturn;
         }
-                          
+
     }
 
-    public GameObject SetValues(GameObject go)
+    public Vector3 SetScale(GameObject go2)
     {
-        if (!nodeParent)
-            nodeParent = new GameObject("clutterParent");
+        Vector3 toReturn = new Vector3(0,0,0);
 
-        //add new object to an empty parent
-        go.transform.parent = nodeParent.transform;
 
-        //set the rotation of the object if there is an override
-        Vector3 tempRot = SetRotation();
-        go.transform.rotation = Quaternion.Euler(tempRot);
+        if (scaleOverride != Vector3.zero) //if there is a value in rot override                
+        {
+            //x
+            if (scaleOverride.x == 0 && scaleX != Vector2.zero)//if x is 0 and the scale has value, return a random value
+                toReturn.x = Random.Range(scaleX.x, scaleX.y);
 
-        //set the scale of the object
-        if (objectScale != Vector3.zero)
-            go.transform.localScale = objectScale;
+            else if (scaleOverride.x != 0) //otherwise use given value
+                toReturn.x = scaleOverride.x;
 
-        //get rid of "(clone)" in the name
-        go.name = go.name;
+            //y
+            if (scaleOverride.y == 0 && scaleY != Vector2.zero)
+                toReturn.y = Random.Range(scaleY.x, scaleY.y);
 
-        return go;
+            else if (scaleOverride.y != 0)
+                toReturn.y = scaleOverride.y;
+
+            //z
+            if (scaleOverride.z == 0 && scaleZ != Vector2.zero)
+                toReturn.z = Random.Range(scaleZ.x, scaleZ.y);
+
+            else if (scaleOverride.z != 0)
+                toReturn.z = scaleOverride.z;
+
+            return toReturn;
+        }
+
+        else //if the override is zero, check if random has any input. Otherwise use prefab data
+        {
+            if (scaleX != Vector2.zero)
+                toReturn.x = Random.Range(scaleX.x, scaleX.y);
+
+            else toReturn.x = go2.transform.localScale.x;
+
+            if (scaleY != Vector2.zero)
+                toReturn.y = Random.Range(scaleY.x, scaleY.y);
+
+            else toReturn.y = go2.transform.localScale.y;
+
+            if (scaleZ != Vector2.zero)
+                toReturn.z = Random.Range(scaleZ.x, scaleZ.y);
+
+            else toReturn.z = go2.transform.localScale.z;
+
+            return toReturn;
+        }
     }
 }
