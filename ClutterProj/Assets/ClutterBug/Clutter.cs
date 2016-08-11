@@ -23,14 +23,13 @@ public class Clutter : MonoBehaviour {
 
     [Space(10)]
 
-    [HideInSubClass]
-    [InspectorButton("SpawnObjectsInArea")]//Calls this function
+    
+    [InspectorButton("SpawnObjectsInArea")]//Calls this function 
     public bool SpawnObjects;//makes a button with this bool
 
     [Space(10)]
 
-    [HideInSubClass]
-    [InspectorButton("DeleteClutter")]
+    [InspectorButton("DeleteClutter")]   
     public bool DeleteObjects;
 
     [Space(10)]
@@ -47,8 +46,7 @@ public class Clutter : MonoBehaviour {
 
     [Tooltip("If enabled, clutter can overlap each other.")]
     public bool allowOverlap = false;
-
-    [Space(10)]
+    
 
     [Tooltip("Object will face surface normal. Overrides all rotation (currently)")]
     public bool faceNormal = false;
@@ -56,6 +54,10 @@ public class Clutter : MonoBehaviour {
     [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
     [Range(0,89)]
     public int angleLimit = 45;
+
+    [HideInParentClass]
+    [Tooltip("Distance between parent clutter and spawn")]
+    public float dist = 1;
 
     [Tooltip("Randomised rotation value. Is overriden by rotation override.")]
     [Header("Randomise Rotation")]
@@ -125,7 +127,7 @@ public class Clutter : MonoBehaviour {
         if (!additive)
             DeleteClutter(); //Delete previously placed objects
 
-        if (prefabList.Count != 0)
+        if (prefabList.Count != 0 && numberToSpawn != 0)
         {
             switch (shape)
             {
@@ -185,7 +187,7 @@ public class Clutter : MonoBehaviour {
         GameObject toSpawn;
         toSpawn = RandomObject(); 
 
-        _loc = transform.TransformPoint(_loc * mult); //takes transform in world space and modifies it using random value
+        _loc = transform.TransformPoint(_loc * mult * dist); //takes transform in world space and modifies it using random value
 
         GameObject tempObj;
         tempObj = (GameObject)Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity);//get object into world
@@ -255,8 +257,8 @@ public class Clutter : MonoBehaviour {
         ClutterChild child = tempObj.GetComponent<ClutterChild>();
 
         //if the child has a clutter child script on it, then instantiate more clutter.
-        //if (child != null)
-         //   child.SpawnObjectsInArea(tempObj.transform, 1);
+        if (child != null)
+            child.SpawnObjectsInArea();
     }
 
 

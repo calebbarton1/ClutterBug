@@ -667,16 +667,19 @@ MonoBehaviour:
   shape: 0
   additive: 0
   allowOverlap: 0
-  faceNormal: 1
+  faceNormal: 0
   angleLimit: 45
+  dist: 1
   objX: 0
-  objY: 1
+  objY: 0
   objZ: 0
-  rotationOverride: {x: 90, y: 0, z: 0}
-  randomScale: {x: 0.25, y: 0.5}
+  rotationOverride: {x: 0, y: 0, z: 0}
+  randomScale: {x: 0, y: 0}
   scaleOverride: {x: 0, y: 0, z: 0}
-  numberToSpawn: 10
-  prefabList: []
+  numberToSpawn: 1
+  prefabList:
+  - {fileID: 100000, guid: 3176aeb440566664ab0bd513a6a46280, type: 2}
+  - {fileID: 100000, guid: 0cd0601cf7da9dc4f80b1d60facd05c5, type: 2}
 --- !u!4 &1175514021
 Transform:
   m_ObjectHideFlags: 0
@@ -961,6 +964,7 @@ MonoBehaviour:
   allowOverlap: 0
   faceNormal: 0
   angleLimit: 89
+  dist: 1
   objX: 0
   objY: 1
   objZ: 0

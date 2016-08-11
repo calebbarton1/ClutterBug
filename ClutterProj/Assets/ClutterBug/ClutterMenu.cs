@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
-
+#endif
 [ExecuteInEditMode]
 public class ClutterMenu : MonoBehaviour {
-
+#if UNITY_EDITOR
     static private GameObject node;
 
 
@@ -17,6 +16,5 @@ public class ClutterMenu : MonoBehaviour {
         Object clone = Instantiate(node, Vector3.zero, Quaternion.identity);
         clone.name = node.name;
     }
-
-}
 #endif
+}
