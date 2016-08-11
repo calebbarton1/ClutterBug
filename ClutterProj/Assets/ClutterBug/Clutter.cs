@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 
 #if UNITY_EDITOR
 using UnityEditor;
-#endif
+
 
 [ExecuteInEditMode]
 public class Clutter : MonoBehaviour {
@@ -367,3 +365,4 @@ public class Clutter : MonoBehaviour {
         }
     }
 }
+#endif
