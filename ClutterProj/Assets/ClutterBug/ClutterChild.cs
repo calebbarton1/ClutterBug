@@ -63,13 +63,10 @@ public class ClutterChild : MonoBehaviour {
 
     private int recursiveCounter;
 
-    public void Recursive(int count)
+    public void SpawnObjectsInArea(Transform toParent, int count)
     {
-        recursiveCounter += count; 
-    }
+        recursiveCounter += count;
 
-    public void SpawnObjectsInArea(Transform toParent)
-    {
         if (recursiveCounter != 50)
         {
             parent = toParent;

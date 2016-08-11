@@ -104,7 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allowOverlap: 0
   faceNormal: 0
-  dist: 4
+  dist: 5
   angleLimit: 45
   objX: 0
   objY: 0
@@ -114,7 +114,7 @@ MonoBehaviour:
   scaleY: {x: 0, y: 0}
   scaleZ: {x: 0, y: 0}
   scaleOverride: {x: 0, y: 0, z: 0}
-  numberToSpawn: 1
+  numberToSpawn: 2
   childClutterList:
   - {fileID: 123020, guid: 70e6ad8aa990e7a409dbf48ded148bdd, type: 2}
   parent: {fileID: 0}
