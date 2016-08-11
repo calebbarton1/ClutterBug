@@ -11,6 +11,7 @@ public class Clutter : MonoBehaviour {
     //Made by Caleb
 
     //enums for collider selection in inspector
+    
     public enum colliderMenu
     {
         Box,
@@ -22,11 +23,13 @@ public class Clutter : MonoBehaviour {
 
     [Space(10)]
 
+    [HideInSubClass]
     [InspectorButton("SpawnObjectsInArea")]//Calls this function
     public bool SpawnObjects;//makes a button with this bool
 
     [Space(10)]
 
+    [HideInSubClass]
     [InspectorButton("DeleteClutter")]
     public bool DeleteObjects;
 
@@ -34,9 +37,11 @@ public class Clutter : MonoBehaviour {
 
 
     //initialise enum and colliders
+    [HideInSubClass]
     [Tooltip("The shape of the area where objects are placed")]
     public colliderMenu shape = colliderMenu.Box;
 
+    [HideInSubClass]
     [Tooltip("Adds clutter per click instead of rerolling")]
     public bool additive = false;
 
@@ -51,8 +56,6 @@ public class Clutter : MonoBehaviour {
     [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
     [Range(0,89)]
     public int angleLimit = 45;
-
-    public float distance;
 
     [Tooltip("Randomised rotation value. Is overriden by rotation override.")]
     [Header("Randomise Rotation")]
@@ -83,25 +86,19 @@ public class Clutter : MonoBehaviour {
     [Space(5)]
 
     [Tooltip("Objects to be created as clutter")]
-    public List<GameObject> goList;//temp
+    public List<GameObject> prefabList;//temp
     
 
     private GameObject nodeParent;
+    
 
-
-    public void Awake ()
-    {
-        //so that the parent is remembered if the game is run.
-        //nodeParent = GameObject.Find("clutterParent");
-    }
-
-    public void OnDrawGizmos()//currently just tells me what the shape of the transform is in the editor
+    public void OnDrawGizmos()
     {
         Gizmos.color = new Color(0.50f, 1.0f, 1.0f, 0.5f);
         switch (shape)
         {
             case colliderMenu.Box:
-                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);
+                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);//making a matrix based on the transform, draw shape based on it
                 Gizmos.DrawCube(Vector3.zero, Vector3.one);
                 Gizmos.color = new Color(0, 0, 0, .75f);
                 Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
@@ -128,7 +125,7 @@ public class Clutter : MonoBehaviour {
         if (!additive)
             DeleteClutter(); //Delete previously placed objects
 
-        if (goList.Count != 0)
+        if (prefabList.Count != 0)
         {
             switch (shape)
             {
@@ -176,8 +173,8 @@ public class Clutter : MonoBehaviour {
         GameObject go;
         int objIndex;
 
-        objIndex = Random.Range(0, goList.Count);
-        go = goList[objIndex];
+        objIndex = Random.Range(0, prefabList.Count);
+        go = prefabList[objIndex];
 
         return go;        
     }
@@ -258,8 +255,8 @@ public class Clutter : MonoBehaviour {
         ClutterChild child = tempObj.GetComponent<ClutterChild>();
 
         //if the child has a clutter child script on it, then instantiate more clutter.
-        if (child != null) { }
-            child.SpawnObjectsInArea(tempObj.transform, 1);
+        //if (child != null)
+         //   child.SpawnObjectsInArea(tempObj.transform, 1);
     }
 
 
@@ -335,7 +332,7 @@ public class Clutter : MonoBehaviour {
 
         if (scaleOverride == Vector3.zero && randomScale != Vector2.zero)
         {
-            float rand = Random.Range(randomScale.x, randomScale.y + 1);
+            float rand = Random.Range(randomScale.x, randomScale.y);
             toReturn = go2.transform.localScale * rand;
 
             return toReturn;

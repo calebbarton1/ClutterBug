@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4467892, g: 0.49139404, b: 0.5470132, a: 1}
+  m_IndirectSpecularColor: {r: 0.4467886, g: 0.4913934, b: 0.5470124, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -644,7 +644,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1175514021}
   - 114: {fileID: 1175514020}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: ClutterNode (1)
   m_TagString: Node
   m_Icon: {fileID: 0}
@@ -672,12 +672,11 @@ MonoBehaviour:
   objX: 0
   objY: 1
   objZ: 0
-  rotationOverride: {x: 0, y: 0, z: 0}
-  randomScale: {x: 1, y: 2}
+  rotationOverride: {x: 90, y: 0, z: 0}
+  randomScale: {x: 0.25, y: 0.5}
   scaleOverride: {x: 0, y: 0, z: 0}
   numberToSpawn: 10
-  goList:
-  - {fileID: 124542, guid: a044b97d1ccd2ca418ca5b017e805458, type: 2}
+  prefabList: []
 --- !u!4 &1175514021
 Transform:
   m_ObjectHideFlags: 0
@@ -969,15 +968,7 @@ MonoBehaviour:
   randomScale: {x: 0, y: 0}
   scaleOverride: {x: 0, y: 0, z: 0}
   numberToSpawn: 100
-  goList:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  prefabList: []
 --- !u!4 &1455845216
 Transform:
   m_ObjectHideFlags: 0

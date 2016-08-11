@@ -8,8 +8,8 @@ using UnityEditor;
 #endif
 
 [ExecuteInEditMode]
-public class ClutterChild : MonoBehaviour {
-
+public partial class ClutterChild : MonoBehaviour { 
+    
 #if UNITY_EDITOR
 
     [Tooltip("If enabled, clutter can overlap each other.")]
@@ -39,9 +39,7 @@ public class ClutterChild : MonoBehaviour {
 
     //temporary. will build custom inspector later for two varaible inputs
     [Tooltip("Will scale objects between two variables.")]
-    [Header("Random Scale")]
-    public Vector2 scaleX;
-    public Vector2 scaleY, scaleZ;
+    public Vector2 randomScale;
 
     [Space(10)]
 
@@ -170,12 +168,11 @@ public class ClutterChild : MonoBehaviour {
             }
         }
 
+        ClutterChild child = tempObj.GetComponent<ClutterChild>();
+
         //if the child has a clutter child script on it, then instantiate more clutter.
-        if (tempObj.GetComponent<ClutterChild>() != null)
-        {
-            tempObj.SendMessage("Recursive", 1);
-            tempObj.SendMessage("SpawnObjectsInArea", this.transform);
-        }
+        if (child != null)
+            child.SpawnObjectsInArea(tempObj.transform, 1);
     }
 
 
@@ -246,52 +243,37 @@ public class ClutterChild : MonoBehaviour {
     {
         Vector3 toReturn = new Vector3(0, 0, 0);
 
-
-        if (scaleOverride != Vector3.zero) //if there is a value in rot override                
+        if (scaleOverride == Vector3.zero && randomScale != Vector2.zero)
         {
-            //x
-            if (scaleOverride.x == 0 && scaleX != Vector2.zero)//if x is 0 and the scale has value, return a random value
-                toReturn.x = Random.Range(scaleX.x, scaleX.y);
-
-            else if (scaleOverride.x != 0) //otherwise use given value
-                toReturn.x = scaleOverride.x;
-
-            //y
-            if (scaleOverride.y == 0 && scaleY != Vector2.zero)
-                toReturn.y = Random.Range(scaleY.x, scaleY.y);
-
-            else if (scaleOverride.y != 0)
-                toReturn.y = scaleOverride.y;
-
-            //z
-            if (scaleOverride.z == 0 && scaleZ != Vector2.zero)
-                toReturn.z = Random.Range(scaleZ.x, scaleZ.y);
-
-            else if (scaleOverride.z != 0)
-                toReturn.z = scaleOverride.z;
+            float rand = Random.Range(randomScale.x, randomScale.y);
+            toReturn = go2.transform.localScale * rand;
 
             return toReturn;
         }
 
-        else //if the override is zero, check if random has any input. Otherwise use prefab data
+        else
         {
-            if (scaleX != Vector2.zero)
-                toReturn.x = Random.Range(scaleX.x, scaleX.y);
+            if (scaleOverride.x != 0)
+                toReturn.x = scaleOverride.x;
 
-            else toReturn.x = go2.transform.localScale.x;
+            else
+                toReturn.x = go2.transform.localScale.x;
 
-            if (scaleY != Vector2.zero)
-                toReturn.y = Random.Range(scaleY.x, scaleY.y);
+            if (scaleOverride.y != 0)
+                toReturn.y = scaleOverride.y;
 
-            else toReturn.y = go2.transform.localScale.y;
+            else
+                toReturn.y = go2.transform.localScale.y;
 
-            if (scaleZ != Vector2.zero)
-                toReturn.z = Random.Range(scaleZ.x, scaleZ.y);
+            if (scaleOverride.z != 0)
+                toReturn.z = scaleOverride.z;
 
-            else toReturn.z = go2.transform.localScale.z;
+            else
+                toReturn.z = go2.transform.localScale.z;
 
             return toReturn;
         }
     }
 #endif
 }
+
