@@ -7,40 +7,10 @@ using UnityEditor;
 
 [ExecuteInEditMode]
 public class Clutter : MonoBehaviour {
+    
 
     //Made by Caleb
-
-    //enums for collider selection in inspector
-    
-    public enum colliderMenu
-    {
-        Box,
-        Sphere,
-    }
-
-    //buttons for generating objects
-    //credit to "zaikman" for the script
-
-    [Space(10)]
-
-    
-    [InspectorButton("SpawnObjectsInArea")]//Calls this function 
-    public bool SpawnObjects;//makes a button with this bool
-
-    [Space(10)]
-
-    [InspectorButton("DeleteClutter")]   
-    public bool DeleteObjects;
-
-    [Space(10)]
-
-
-    //initialise enum and colliders
-    [HideInSubClass]
-    [Tooltip("The shape of the area where objects are placed")]
-    public colliderMenu shape = colliderMenu.Box;
-
-    [HideInSubClass]
+       
     [Tooltip("Adds clutter per click instead of rerolling")]
     public bool additive = false;
 
@@ -53,11 +23,7 @@ public class Clutter : MonoBehaviour {
 
     [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
     [Range(0,89)]
-    public int angleLimit = 45;
-
-    [HideInParentClass]
-    [Tooltip("Distance between parent clutter and spawn")]
-    public float dist = 1;
+    public int angleLimit = 45;    
 
     [Tooltip("Randomised rotation value. Is overriden by rotation override.")]
     [Header("Randomise Rotation")]
@@ -83,92 +49,13 @@ public class Clutter : MonoBehaviour {
     [Space(10)]
 
     [Tooltip("Number of clutter created per click")]
-    public int numberToSpawn;
+    public int numberToSpawn = 1;
 
     [Space(5)]
 
     [Tooltip("Objects to be created as clutter")]
-    public List<GameObject> prefabList;//temp
+    public List<GameObject> prefabList;//temp    
     
-
-    private GameObject nodeParent;
-    
-
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = new Color(0.50f, 1.0f, 1.0f, 0.5f);
-        switch (shape)
-        {
-            case colliderMenu.Box:
-                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);//making a matrix based on the transform, draw shape based on it
-                Gizmos.DrawCube(Vector3.zero, Vector3.one);
-                Gizmos.color = new Color(0, 0, 0, .75f);
-                Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-                Gizmos.matrix = Matrix4x4.identity;
-                break;
-
-            case colliderMenu.Sphere:
-                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);
-                Gizmos.DrawSphere(Vector3.zero, 1);
-                Gizmos.color = new Color(0, 0, 0, .75f);
-                Gizmos.DrawWireSphere(Vector3.zero, 1);
-                Gizmos.matrix = Matrix4x4.identity;
-                break;
-
-            default:
-                break;
-        }
-    }
-
-   
-
-    private void SpawnObjectsInArea()
-    {
-        if (!additive)
-            DeleteClutter(); //Delete previously placed objects
-
-        if (prefabList.Count != 0 && numberToSpawn != 0)
-        {
-            switch (shape)
-            {
-                case colliderMenu.Box:
-
-                    for (int index = 0; index < numberToSpawn; ++index)
-                    {
-                        Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f));//random x and z on top of box
-                        InstantiateObject(spawnPos,.45f);
-                    }
-
-                    break;
-
-                case colliderMenu.Sphere:
-
-                    for (int index = 0; index < numberToSpawn; ++index)
-                    {
-                        Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
-                        spawnPos.y = 1;
-                        InstantiateObject(spawnPos,1);
-                    }
-
-                    break;
-
-                default:
-                    break;
-            }            
-        }
-
-        else
-        {
-            Debug.LogWarning("No Objects in List!");
-            return;
-        }
-    }
-    
-
-    private void DeleteClutter()
-    {
-        DestroyImmediate(nodeParent);
-    }
 
     public GameObject RandomObject()//temp
     {
@@ -181,19 +68,20 @@ public class Clutter : MonoBehaviour {
         return go;        
     }
 
-    public void InstantiateObject(Vector3 _loc, float mult)//instantiates object with given location
+    public void InstantiateObject(Vector3 _loc, float _mult, float _dist, Transform toParent)//instantiates object with given location
     {        
         //gets random object
         GameObject toSpawn;
         toSpawn = RandomObject(); 
 
-        _loc = transform.TransformPoint(_loc * mult * dist); //takes transform in world space and modifies it using random value
+        _loc = transform.TransformPoint(_loc * _mult * _dist); //takes transform in world space and modifies it using random value
 
         GameObject tempObj;
         tempObj = (GameObject)Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity);//get object into world
 
         tempObj = SetTransform(tempObj);
 
+        tempObj.transform.parent = toParent;
         tempObj.name = toSpawn.name;
 
         RaycastHit hit;
@@ -205,12 +93,12 @@ public class Clutter : MonoBehaviour {
             mask = 1 << mask;//bitshift it
             mask = ~mask;//we want to cast against everything else but the clutter
 
-            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, transform.localScale.y, mask);//the new vector is so the spherecast doesn't start inside of a clutter in the case of very large objects
+            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, Mathf.Infinity, mask);
         }
 
 
         else
-            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, transform.localScale.y);
+            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, Mathf.Infinity);
 
 
         //if raycast doesn't hit anything break out of function.
@@ -223,8 +111,7 @@ public class Clutter : MonoBehaviour {
 
         //do the thing
         else
-        {
-           
+        {           
             if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it. Set by user.
             {
                 Debug.Log("Angle too sharp. Object " + tempObj.name + " not instantiated");
@@ -254,22 +141,18 @@ public class Clutter : MonoBehaviour {
             }
         }
 
-        ClutterChild child = tempObj.GetComponent<ClutterChild>();
+        
+        NodeChild child = tempObj.GetComponent<NodeChild>();
 
         //if the child has a clutter child script on it, then instantiate more clutter.
         if (child != null)
             child.SpawnObjectsInArea();
+            
     }
 
 
     public GameObject SetTransform(GameObject go)
-    {
-        if (!nodeParent)
-            nodeParent = new GameObject("clutterParent");
-
-        //add new object to an empty parent
-        go.transform.parent = nodeParent.transform;
-
+    {       
         //set the rotation of the object if there is an override
         Vector3 tempRot = SetRotation();
         go.transform.rotation = Quaternion.Euler(tempRot);

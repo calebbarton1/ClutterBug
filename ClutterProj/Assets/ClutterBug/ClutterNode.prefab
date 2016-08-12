@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 444846}
-  - 114: {fileID: 11422224}
+  - 114: {fileID: 114000011241938268}
   m_Layer: 2
   m_Name: ClutterNode
   m_TagString: Node
@@ -29,30 +29,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11422224
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 182922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80bcda37e8ff0e747915b79cdb37ab89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpawnObjects: 0
-  DeleteObjects: 0
-  shape: 0
-  additive: 0
-  allowOverlap: 0
-  angleLimit: 45
-  objX: 0
-  objY: 0
-  objZ: 0
-  rotationOverride: {x: 0, y: 0, z: 0}
-  objectScale: {x: 1, y: 1, z: 1}
-  numberToSpawn: 5
-  goList: []
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -64,3 +40,30 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 182922}
   m_IsPrefabParent: 1
+--- !u!114 &114000011241938268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 580376ef904d6264abee61c311c7a717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  additive: 0
+  allowOverlap: 0
+  faceNormal: 0
+  angleLimit: 7
+  objX: 0
+  objY: 0
+  objZ: 0
+  rotationOverride: {x: 0, y: 0, z: 0}
+  randomScale: {x: 0, y: 0}
+  scaleOverride: {x: 0, y: 0, z: 0}
+  numberToSpawn: 1
+  prefabList: []
+  SpawnClutter: 0
+  DeleteObjects: 0
+  shape: 0
+  nodeParent: {fileID: 0}

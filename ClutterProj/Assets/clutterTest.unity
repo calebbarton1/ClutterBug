@@ -635,6 +635,62 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1958196695}
   m_RootOrder: 6
+--- !u!1 &1109349550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1109349552}
+  - 114: {fileID: 1109349551}
+  m_Layer: 2
+  m_Name: ClutterNode
+  m_TagString: Node
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1109349551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1109349550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 580376ef904d6264abee61c311c7a717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  additive: 0
+  allowOverlap: 0
+  faceNormal: 0
+  angleLimit: 7
+  objX: 0
+  objY: 0
+  objZ: 0
+  rotationOverride: {x: 0, y: 0, z: 0}
+  randomScale: {x: 0, y: 0}
+  scaleOverride: {x: 0, y: 0, z: 0}
+  numberToSpawn: 1
+  prefabList: []
+  SpawnClutter: 0
+  DeleteObjects: 0
+  shape: 1
+  nodeParent: {fileID: 0}
+--- !u!4 &1109349552
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1109349550}
+  m_LocalRotation: {x: -0, y: 0.2047221, z: -0, w: 0.97882015}
+  m_LocalPosition: {x: -33.16, y: 0.93, z: 0}
+  m_LocalScale: {x: 14.12595, y: 8.71206, z: 8.71206}
+  m_LocalEulerAnglesHint: {x: 0, y: 23.417002, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
 --- !u!1 &1175514019
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,27 +715,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1175514019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80bcda37e8ff0e747915b79cdb37ab89, type: 3}
+  m_Script: {fileID: 11500000, guid: 580376ef904d6264abee61c311c7a717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnObjects: 0
-  DeleteObjects: 0
-  shape: 0
   additive: 0
-  allowOverlap: 0
+  allowOverlap: 1
   faceNormal: 0
-  angleLimit: 45
-  dist: 1
+  angleLimit: 89
   objX: 0
-  objY: 0
+  objY: 1
   objZ: 0
   rotationOverride: {x: 0, y: 0, z: 0}
   randomScale: {x: 0, y: 0}
-  scaleOverride: {x: 0, y: 0, z: 0}
-  numberToSpawn: 1
+  scaleOverride: {x: 1, y: 1, z: 1}
+  numberToSpawn: 5
   prefabList:
-  - {fileID: 100000, guid: 3176aeb440566664ab0bd513a6a46280, type: 2}
-  - {fileID: 100000, guid: 0cd0601cf7da9dc4f80b1d60facd05c5, type: 2}
+  - {fileID: 100000, guid: d7ebb2b5789a2be45b7bd26b3b9d50aa, type: 2}
+  - {fileID: 100000, guid: 23062208c1e1ace4d9e5270be8b68dcb, type: 2}
+  SpawnClutter: 0
+  DeleteObjects: 0
+  shape: 0
+  nodeParent: {fileID: 0}
 --- !u!4 &1175514021
 Transform:
   m_ObjectHideFlags: 0
@@ -687,12 +743,12 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1175514019}
   m_LocalRotation: {x: -0, y: -0.18584636, z: -0, w: 0.9825788}
-  m_LocalPosition: {x: 27.41, y: 8.27, z: 0.39}
+  m_LocalPosition: {x: 5.22, y: 8.27, z: 0.39}
   m_LocalScale: {x: 12, y: 24.990582, z: 12}
   m_LocalEulerAnglesHint: {x: 0, y: -21.161001, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!1 &1226113876
 GameObject:
   m_ObjectHideFlags: 0
@@ -930,62 +986,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1958196695}
   m_RootOrder: 2
---- !u!1 &1455845214
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1455845216}
-  - 114: {fileID: 1455845215}
-  m_Layer: 2
-  m_Name: ClutterNode
-  m_TagString: Node
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1455845215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1455845214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80bcda37e8ff0e747915b79cdb37ab89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpawnObjects: 0
-  DeleteObjects: 0
-  shape: 1
-  additive: 0
-  allowOverlap: 0
-  faceNormal: 0
-  angleLimit: 89
-  dist: 1
-  objX: 0
-  objY: 1
-  objZ: 0
-  rotationOverride: {x: 0, y: 0, z: 0}
-  randomScale: {x: 0, y: 0}
-  scaleOverride: {x: 0, y: 0, z: 0}
-  numberToSpawn: 100
-  prefabList: []
---- !u!4 &1455845216
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1455845214}
-  m_LocalRotation: {x: -0, y: -0.87222695, z: -0, w: 0.48910144}
-  m_LocalPosition: {x: -32.8, y: -0.35, z: 1.66}
-  m_LocalScale: {x: 7.0948277, y: 7.094831, z: 4.604513}
-  m_LocalEulerAnglesHint: {x: 0, y: -121.51301, z: 0}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
 --- !u!1 &1679306276
 GameObject:
   m_ObjectHideFlags: 0
@@ -1101,4 +1101,4 @@ Transform:
   - {fileID: 632199301}
   - {fileID: 5199366}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
