@@ -6,20 +6,24 @@ public class NodeChild : Clutter
 {
     [Space(10)]
 
-    [Tooltip("Distance between parent clutter and child")]
+    [Tooltip("Distance between parent clutter and child (currently scales down with object scale. TOFIX)")]
     public float distance = 1;
+
+    
 
     public void SpawnObjectsInArea()
     {
+        Collider col = GetComponent<Collider>();
+
         //so objects aren't being spawned inside their parent. Their parent is essentially another node.
         {
             //use the largest value of the scale to ensure objects aren't inside parent
             float toMove;
-            if (transform.lossyScale.x > transform.lossyScale.z)
-                toMove = transform.lossyScale.x;
+            if (col.bounds.size.x > col.bounds.size.z)
+                toMove = col.bounds.size.x;
 
             else
-                toMove = transform.lossyScale.z;
+                toMove = col.bounds.size.z;
 
             distance = distance + toMove;
         }

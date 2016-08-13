@@ -74,8 +74,8 @@ public class Clutter : MonoBehaviour {
         GameObject toSpawn;
         toSpawn = RandomObject(); 
 
-        _loc = transform.TransformPoint(_loc * _mult * _dist); //takes transform in world space and modifies it using random value
-
+        _loc = transform.TransformPoint(_loc * _mult * _dist); //takes local transform into world space and modifies it using random value     
+  
         GameObject tempObj;
         tempObj = (GameObject)Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity);//get object into world
 
@@ -84,8 +84,18 @@ public class Clutter : MonoBehaviour {
         tempObj.transform.parent = toParent;
         tempObj.name = toSpawn.name;
 
+        Collider col = tempObj.GetComponent<Collider>();
+
         RaycastHit hit;
         bool cast;
+
+        float sphereSize;
+
+        if (col.bounds.size.x > col.bounds.size.z)
+            sphereSize = col.bounds.size.x;
+
+        else
+            sphereSize = col.bounds.size.z;
 
         if (allowOverlap)
         {
@@ -93,12 +103,12 @@ public class Clutter : MonoBehaviour {
             mask = 1 << mask;//bitshift it
             mask = ~mask;//we want to cast against everything else but the clutter
 
-            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, Mathf.Infinity, mask);
+            cast = Physics.SphereCast(_loc, (sphereSize * .5f), Vector3.down, out hit, Mathf.Infinity, mask);
         }
 
 
         else
-            cast = Physics.SphereCast(_loc, (tempObj.transform.localScale.x * .5f), Vector3.down, out hit, Mathf.Infinity);
+            cast = Physics.SphereCast(_loc, (sphereSize * .5f), Vector3.down, out hit, Mathf.Infinity);
 
 
         //if raycast doesn't hit anything break out of function.
