@@ -3,6 +3,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
 [ExecuteInEditMode]
 public class ClutterMenu : MonoBehaviour {
 #if UNITY_EDITOR
