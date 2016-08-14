@@ -14,6 +14,11 @@ public class Node : Clutter {
 
     [Space(10)]
 
+    [Tooltip("Adds clutter per click instead of rerolling")]
+    public bool additive = false;
+
+    [Space(10)]
+
     
     [InspectorButton("SpawnObjectsInArea")]//Calls this function 
     public bool SpawnClutter;//makes a button with this bool

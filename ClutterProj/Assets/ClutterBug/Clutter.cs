@@ -11,8 +11,7 @@ public class Clutter : MonoBehaviour {
 
     //Made by Caleb
        
-    [Tooltip("Adds clutter per click instead of rerolling")]
-    public bool additive = false;
+    
 
     [Tooltip("If enabled, clutter can overlap each other.")]
     public bool allowOverlap = false;
