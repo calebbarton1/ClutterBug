@@ -114,7 +114,7 @@ public class Node : Clutter {
 
         else
         {
-            Debug.LogWarning("Node has no objects in List!");
+            Debug.LogWarning("Node has no prefabs in List!");
             return;
         }
     }

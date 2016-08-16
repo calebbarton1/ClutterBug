@@ -24,7 +24,7 @@ Transform:
   m_GameObject: {fileID: 182922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -51,7 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580376ef904d6264abee61c311c7a717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  additive: 0
   allowOverlap: 0
   faceNormal: 0
   angleLimit: 7
@@ -63,7 +62,8 @@ MonoBehaviour:
   scaleOverride: {x: 0, y: 0, z: 0}
   numberToSpawn: 1
   prefabList: []
+  additive: 0
   SpawnClutter: 0
   DeleteObjects: 0
   shape: 0
-  nodeParent: {fileID: 0}
+  clutterParent: {fileID: 0}

@@ -91,10 +91,10 @@ public class Clutter : MonoBehaviour {
         float sphereSize;
 
         if (col.bounds.size.x > col.bounds.size.z)
-            sphereSize = col.bounds.size.x;
+            sphereSize = col.bounds.extents.x;
 
         else
-            sphereSize = col.bounds.size.z;
+            sphereSize = col.bounds.extents.z;
 
         if (allowOverlap)
         {
@@ -102,12 +102,12 @@ public class Clutter : MonoBehaviour {
             mask = 1 << mask;//bitshift it
             mask = ~mask;//we want to cast against everything else but the clutter
 
-            cast = Physics.SphereCast(_loc, (sphereSize * .5f), Vector3.down, out hit, Mathf.Infinity, mask);
+            cast = Physics.SphereCast(_loc, (sphereSize * 0.5f), Vector3.down, out hit, Mathf.Infinity, mask);
         }
 
 
         else
-            cast = Physics.SphereCast(_loc, (sphereSize * .5f), Vector3.down, out hit, Mathf.Infinity);
+            cast = Physics.SphereCast(_loc, (sphereSize * 0.5f), Vector3.down, out hit, Mathf.Infinity);
 
 
         //if raycast doesn't hit anything break out of function.
@@ -141,7 +141,7 @@ public class Clutter : MonoBehaviour {
 
             //offset the hit point so the object is on the surface
             Vector3 tempPos = tempObj.transform.position;
-            tempPos.y += tempObj.transform.localScale.y * .5f;
+            tempPos.y += tempObj.transform.lossyScale.y * .5f;
             tempObj.transform.position = tempPos;
             
             if (faceNormal)//temp. currently overrides all other rotation values
