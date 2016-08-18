@@ -9,11 +9,11 @@ public class NodeChild : Clutter
     [Tooltip("Distance between parent clutter and child (currently scales down with object scale. TOFIX)")]
     public float distance = 1;
 
-    
+
 
     public void SpawnObjectsInArea()
     {
-        Mesh col = GetComponent<MeshFilter>().sharedMesh;        
+        Mesh col = GetComponent<MeshFilter>().sharedMesh;
 
         //so objects aren't being spawned inside their parent. Their parent is essentially another node.
         {
@@ -31,14 +31,14 @@ public class NodeChild : Clutter
                 distance = 1;
         }
 
-       
+
 
         if (prefabList.Count != 0 && numberToSpawn != 0)
         {
             for (int index = 0; index < numberToSpawn; ++index)
             {
                 Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
-                spawnPos.y = 10;
+                spawnPos.y = 5;
                 InstantiateObject(spawnPos, 1.1f, distance, transform);
             }
         }

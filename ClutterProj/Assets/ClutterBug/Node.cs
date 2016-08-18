@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
 [ExecuteInEditMode]
-public class Node : Clutter {
+public class Node : Clutter
+{
     //enums for collider selection in inspector
     public enum colliderMenu
     {
@@ -19,7 +20,7 @@ public class Node : Clutter {
 
     [Space(10)]
 
-    
+
     [InspectorButton("SpawnObjectsInArea")]//Calls this function 
     public bool SpawnClutter;//makes a button with this bool
 
@@ -96,7 +97,7 @@ public class Node : Clutter {
                     {
                         Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
                         spawnPos.y = 1;
-                        InstantiateObject(spawnPos, 1, 1, clutterParent.transform);
+                        InstantiateObject(spawnPos, 0.9f, 1, clutterParent.transform);
                     }
 
                     break;

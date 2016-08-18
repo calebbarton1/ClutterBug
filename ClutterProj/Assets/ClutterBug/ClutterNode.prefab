@@ -51,9 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580376ef904d6264abee61c311c7a717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
   allowOverlap: 0
   faceNormal: 0
-  angleLimit: 7
+  angleLimit: 45
   objX: 0
   objY: 0
   objZ: 0

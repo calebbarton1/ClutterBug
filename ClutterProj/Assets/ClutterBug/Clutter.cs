@@ -6,7 +6,8 @@ using UnityEditor;
 
 
 [ExecuteInEditMode]
-public class Clutter : MonoBehaviour {
+public class Clutter : MonoBehaviour
+{
     //Made by Caleb
 
     [Tooltip("Will display console alerts to prefabs not instantiated. May cause performance drops.")]
@@ -16,14 +17,14 @@ public class Clutter : MonoBehaviour {
 
     [Tooltip("If enabled, clutter can overlap each other.")]
     public bool allowOverlap = false;
-    
+
 
     [Tooltip("Object will face surface normal. Overrides all rotation (currently)")]
     public bool faceNormal = false;
 
     [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
-    [Range(0,89)]
-    public int angleLimit = 45;    
+    [Range(0, 89)]
+    public int angleLimit = 45;
 
     [Tooltip("Randomised rotation value. Is overriden by rotation override.")]
     [Header("Randomise Rotation")]
@@ -31,7 +32,7 @@ public class Clutter : MonoBehaviour {
     public bool objY, objZ;
 
     [Space(10)]
-    
+
     [Tooltip("Overrides prefab rotation and random rotation. Leave at zero to use prefab setting.")]
     public Vector3 rotationOverride;
 
@@ -55,7 +56,7 @@ public class Clutter : MonoBehaviour {
 
     [Tooltip("Objects to be created as clutter")]
     public List<GameObject> prefabList;//temp    
-    
+
 
     public GameObject RandomObject()//temp
     {
@@ -65,53 +66,97 @@ public class Clutter : MonoBehaviour {
         objIndex = Random.Range(0, prefabList.Count);
         go = prefabList[objIndex];
 
-        return go;        
+        return go;
     }
 
     public void InstantiateObject(Vector3 _loc, float _mult, float _dist, Transform toParent)//instantiates object with given location
-    {        
+    {
         //gets random object
         GameObject toSpawn;
-        toSpawn = RandomObject(); 
+        toSpawn = RandomObject();
+
+        /*
+        if (toSpawn.GetComponent<Collider>() == null)
+        {
+            Debug.LogWarning("No Collider detected on " + toSpawn.name + ". ClutterBug requires Colliders to function.");            
+        }
+        */
 
         _loc = transform.TransformPoint(_loc * _mult * _dist); //takes local transform into world space and modifies it using random value     
-  
+
         GameObject tempObj;
-        tempObj = (GameObject)Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity);//get object into world
+        tempObj = Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity) as GameObject;//get object into world
 
+        //modify the object as needed
         tempObj = SetTransform(tempObj);
-
         tempObj.transform.parent = toParent;
         tempObj.name = toSpawn.name;
 
-        Mesh col = tempObj.GetComponent<MeshFilter>().sharedMesh;
+        //get collider info
+        Mesh mesh = tempObj.GetComponent<MeshFilter>().sharedMesh;
+        Rigidbody rb = tempObj.GetComponent<Rigidbody>();
 
+        //RB Sweep can't use concave mesh colliders, so this checks for those
+        MeshCollider col = tempObj.GetComponent<MeshCollider>();
+        bool conv = true;
+
+        if (col != null)
+            conv = col.convex;
+
+
+        //setting up info
         RaycastHit hit;
         bool cast;
 
-        float sphereSize;
-
-        if (col.bounds.extents.x > col.bounds.extents.z)
-            sphereSize = col.bounds.extents.x;
-
-        else
-            sphereSize = col.bounds.extents.z;
-
-        if (allowOverlap)
+        //if there us a rigidbody, use RBSweep
+        //RBSweep can't mask, so we spherecast if overlap is on
+        if (rb != null && !allowOverlap && conv)
         {
-            int mask = LayerMask.NameToLayer("Clutter");//grab layer of clutter
-            mask = 1 << mask;//bitshift it
-            mask = ~mask;//we want to cast against everything else but the clutter
+            if (debug)
+                Debug.Log("Using RBSweep");
 
-            cast = Physics.SphereCast(_loc, (sphereSize), Vector3.down, out hit, Mathf.Infinity, mask);
+            //move the object so it can cast
+            tempObj.transform.position = _loc;
+
+            cast = rb.SweepTest(Vector3.down, out hit, Mathf.Infinity);
+        }
+
+        //otherwise spherecast it
+        else if (mesh != null)
+        {
+            if (debug)
+                Debug.Log("Using casting");
+            //make spherecast size the largest of the mesh
+            float sphereSize;
+
+            if (mesh.bounds.extents.x > mesh.bounds.extents.z)
+                sphereSize = mesh.bounds.extents.x;
+
+            else
+                sphereSize = mesh.bounds.extents.z;
+
+            if (allowOverlap)
+            {
+                int mask = LayerMask.NameToLayer("Clutter");//grab layer of clutter
+                mask = 1 << mask;//bitshift it
+                mask = ~mask;//we want to cast against everything else but the clutter
+
+                cast = Physics.SphereCast(_loc, sphereSize, Vector3.down, out hit, Mathf.Infinity, mask);
+            }
+
+
+            else
+                cast = Physics.SphereCast(_loc, sphereSize, Vector3.down, out hit, Mathf.Infinity);
         }
 
 
         else
-            cast = Physics.SphereCast(_loc, (sphereSize), Vector3.down, out hit, Mathf.Infinity);
+        {
+            Debug.LogWarning("Could not find a Rigidbody or a Meshfilter on " + tempObj.name + ". ClutterBug requires either of these components to function.");
+            return;
+        }
 
-
-        //if raycast doesn't hit anything break out of function.
+        //if cast doesn't hit anything break out of function.
         if (!cast)
         {
             if (debug)
@@ -120,10 +165,10 @@ public class Clutter : MonoBehaviour {
             return;
         }
 
-        //do the thing
+
         else
-        {           
-            if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it. Set by user.
+        {
+            if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it.
             {
                 if (debug)
                     Debug.Log("Angle too sharp. Object " + tempObj.name + " not instantiated");
@@ -131,48 +176,46 @@ public class Clutter : MonoBehaviour {
                 return;
             }
 
-            
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Clutter") && !allowOverlap)//if the user chooses, objects will not overlap
+
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Clutter") && !allowOverlap)//checking if another clutter is there
             {
-                if  (debug)
+                if (debug)
                     Debug.Log("Clutter in the way. Object " + tempObj.name + " not instantiated");
                 DestroyImmediate(tempObj);
                 return;
             }
 
-            //move object to point
-            tempObj.transform.position = hit.point;
 
             //offset the hit point so the object is on the surface
-            Vector3 tempPos = tempObj.transform.position;
+            Vector3 tempPos = hit.point;
             tempPos.y += tempObj.transform.lossyScale.y * .5f;
             tempObj.transform.position = tempPos;
-            
+
             if (faceNormal)//temp. currently overrides all other rotation values
             {
                 tempObj.transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;//placeholder
             }
         }
 
-        
+
         NodeChild child = tempObj.GetComponent<NodeChild>();
 
         //if the child has a clutter child script on it, then instantiate more clutter.
         if (child != null)
             child.SpawnObjectsInArea();
-            
+
     }
 
 
     public GameObject SetTransform(GameObject go)
-    {       
+    {
         //set the rotation of the object if there is an override
         Vector3 tempRot = SetRotation();
         go.transform.rotation = Quaternion.Euler(tempRot);
 
         //set the scale of the object
         go.transform.localScale = SetScale(go);
-        
+
         return go;
     }
 
@@ -226,7 +269,7 @@ public class Clutter : MonoBehaviour {
 
     public Vector3 SetScale(GameObject go2)
     {
-        Vector3 toReturn = new Vector3(0,0,0);
+        Vector3 toReturn = new Vector3(0, 0, 0);
 
         if (scaleOverride == Vector3.zero && randomScale != Vector2.zero)
         {
