@@ -26,6 +26,9 @@ public class NodeChild : Clutter
                 toMove = col.bounds.extents.z;
 
             distance = distance + toMove;
+
+            if (distance == 0)
+                distance = 1;
         }
 
        

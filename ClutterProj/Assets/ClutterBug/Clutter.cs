@@ -7,11 +7,12 @@ using UnityEditor;
 
 [ExecuteInEditMode]
 public class Clutter : MonoBehaviour {
-    
-
     //Made by Caleb
-       
-    
+
+    [Tooltip("Will display console alerts to prefabs not instantiated. May cause performance drops.")]
+    public bool debug = false;
+
+    [Space(10)]
 
     [Tooltip("If enabled, clutter can overlap each other.")]
     public bool allowOverlap = false;
@@ -83,14 +84,14 @@ public class Clutter : MonoBehaviour {
         tempObj.transform.parent = toParent;
         tempObj.name = toSpawn.name;
 
-        Collider col = tempObj.GetComponent<Collider>();
+        Mesh col = tempObj.GetComponent<MeshFilter>().sharedMesh;
 
         RaycastHit hit;
         bool cast;
 
         float sphereSize;
 
-        if (col.bounds.size.x > col.bounds.size.z)
+        if (col.bounds.extents.x > col.bounds.extents.z)
             sphereSize = col.bounds.extents.x;
 
         else
@@ -102,18 +103,19 @@ public class Clutter : MonoBehaviour {
             mask = 1 << mask;//bitshift it
             mask = ~mask;//we want to cast against everything else but the clutter
 
-            cast = Physics.SphereCast(_loc, (sphereSize * 0.5f), Vector3.down, out hit, Mathf.Infinity, mask);
+            cast = Physics.SphereCast(_loc, (sphereSize), Vector3.down, out hit, Mathf.Infinity, mask);
         }
 
 
         else
-            cast = Physics.SphereCast(_loc, (sphereSize * 0.5f), Vector3.down, out hit, Mathf.Infinity);
+            cast = Physics.SphereCast(_loc, (sphereSize), Vector3.down, out hit, Mathf.Infinity);
 
 
         //if raycast doesn't hit anything break out of function.
         if (!cast)
         {
-            Debug.Log("Collider not found in bounds of node. Object " + tempObj.name + " not instantiated");
+            if (debug)
+                Debug.Log("Collider not found in bounds of node. Object " + tempObj.name + " not instantiated");
             DestroyImmediate(tempObj);
             return;
         }
@@ -123,7 +125,8 @@ public class Clutter : MonoBehaviour {
         {           
             if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it. Set by user.
             {
-                Debug.Log("Angle too sharp. Object " + tempObj.name + " not instantiated");
+                if (debug)
+                    Debug.Log("Angle too sharp. Object " + tempObj.name + " not instantiated");
                 DestroyImmediate(tempObj);
                 return;
             }
@@ -131,7 +134,8 @@ public class Clutter : MonoBehaviour {
             
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Clutter") && !allowOverlap)//if the user chooses, objects will not overlap
             {
-                Debug.Log("Clutter in the way. Object " + tempObj.name + " not instantiated");
+                if  (debug)
+                    Debug.Log("Clutter in the way. Object " + tempObj.name + " not instantiated");
                 DestroyImmediate(tempObj);
                 return;
             }
