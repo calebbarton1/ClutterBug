@@ -1,2 +1,7 @@
-# Clutter
-Clutter project for studio 1
+# ClutterBug
+Tutorial for program can be found here:
+https://calebbartonblog.wordpress.com/2016/08/22/clutterbug-tutorial/
+
+If you have any questions contact me at caleb.barton@hotmail.com
+
+If you find any bugs please notify me using the Github report system.
