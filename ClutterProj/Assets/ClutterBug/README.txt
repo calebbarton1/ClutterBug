@@ -1,7 +1,4 @@
-HOW TO USE
+TUTORIAL FOR CLUTTERBUG CAN BE FOUND ON MY BLOG HERE:
+https://calebbartonblog.wordpress.com/2016/08/22/clutterbug-tutorial/
 
-Clutter you want to spawn requires a collider on it
-
-To prevent overlapping clutter, create a layer named "Clutter", and make sure the allow overlap bool is off
-
-To have clutter spawn "child" clutter, simply attach the ChildClutter script to the prefab you are creating in the editor, then add other prefabs into the gameobject list.
+If you find any bugs or have any questions, make an issue in this repo or contact me at caleb.barton@hotmail.com
