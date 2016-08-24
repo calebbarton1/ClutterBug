@@ -77,6 +77,20 @@ public class Node : Clutter
         if (!clutterParent)
             clutterParent = new GameObject("clutterParent");
 
+        //check if scale on node is negative (it shouldn't)
+        Vector3 temp = transform.localScale;
+
+        if (transform.localScale.x < 0)
+            temp.x -= transform.localScale.x * 2;
+
+        if (transform.localScale.y < 0)
+            temp.y -= transform.localScale.y * 2;
+
+        if (transform.localScale.x < 0)
+            temp.z -= transform.localScale.z * 2;
+
+        transform.localScale = temp;
+
         if (prefabList.Count != 0 && numberToSpawn != 0)
         {
             switch (shape)

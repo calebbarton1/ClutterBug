@@ -13,6 +13,20 @@ public class NodeChild : Clutter
 
     public void SpawnObjectsInArea()
     {
+        //check if prefab has negative scale (it shouldn't)
+        Vector3 temp = transform.localScale ;
+
+        if (transform.localScale.x < 0)
+            temp.x -= transform.localScale.x * 2;
+
+        if (transform.localScale.y < 0)
+            temp.y -= transform.localScale.y * 2;
+
+        if (transform.localScale.x < 0)
+            temp.z -= transform.localScale.z * 2;
+
+        transform.localScale = temp;
+
         Mesh col = GetComponent<MeshFilter>().sharedMesh;
 
         //so objects aren't being spawned inside their parent. Their parent is essentially another node.
