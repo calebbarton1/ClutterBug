@@ -56,10 +56,10 @@ public class Clutter : MonoBehaviour
     [Space(5)]
 
     [Tooltip("Objects to be created as clutter")]
-    public List<GameObject> prefabList;//temp    
+    public List<GameObject> prefabList;
 
 
-    public GameObject RandomObject()//temp
+    public GameObject RandomObject()
     {
         GameObject go;
         int objIndex;
@@ -75,13 +75,6 @@ public class Clutter : MonoBehaviour
         //gets random object
         GameObject toSpawn;
         toSpawn = RandomObject();
-
-        /*
-        if (toSpawn.GetComponent<Collider>() == null)
-        {
-            Debug.LogWarning("No Collider detected on " + toSpawn.name + ". ClutterBug requires Colliders to function.");            
-        }
-        */
 
         _loc = transform.TransformPoint(_loc * _mult * _dist); //takes local transform into world space and modifies it using random value     
 
@@ -185,7 +178,7 @@ public class Clutter : MonoBehaviour
                 DestroyImmediate(tempObj);
                 return;
             }
-            
+
             //Move object where it's supposed to            
             tempObj.transform.position = hit.point;
             //offset so it isn't in the ground
@@ -241,7 +234,7 @@ public class Clutter : MonoBehaviour
                 toReturn.y = rotationOverride.y;
 
             //z
-            if (rotationOverride.y == 0 && rotZ!= Vector2.zero)//if x is 0 and the bool is checked, return a random value
+            if (rotationOverride.y == 0 && rotZ != Vector2.zero)//if x is 0 and the bool is checked, return a random value
                 toReturn.y = Random.Range(rotZ.x, rotZ.y);
 
             else if (rotationOverride.z != 0)

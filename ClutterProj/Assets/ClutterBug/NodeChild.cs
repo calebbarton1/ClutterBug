@@ -14,7 +14,7 @@ public class NodeChild : Clutter
     public void SpawnObjectsInArea()
     {
         //check if prefab has negative scale (it shouldn't)
-        Vector3 temp = transform.localScale ;
+        Vector3 temp = transform.localScale;
 
         if (transform.localScale.x < 0)
             temp.x -= transform.localScale.x * 2;
