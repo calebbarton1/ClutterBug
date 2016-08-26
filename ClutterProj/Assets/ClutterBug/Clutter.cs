@@ -19,17 +19,18 @@ public class Clutter : MonoBehaviour
     public bool allowOverlap = false;
 
 
-    [Tooltip("Object will face surface normal. Overrides all rotation (currently)")]
+    [Tooltip("Object will face surface normal")]
     public bool faceNormal = false;
 
-    [Tooltip("If the collider's angle is less than or equal to this value, the clutter wont spawn.")]
+    [Tooltip("If the collider's angle is less than this value, the clutter wont spawn.")]
     [Range(0, 89)]
     public int angleLimit = 45;
 
-    [Tooltip("Randomised rotation value. Is overriden by rotation override.")]
+    [Tooltip("Randomised rotation value between a Min and Max. Is overriden by rotation override.")]
     [Header("Randomise Rotation")]
-    public bool objX;
-    public bool objY, objZ;
+    public Vector2 rotX;
+    [Tooltip("Randomised rotation value between a Min and Max. Is overriden by rotation override.")]
+    public Vector2 rotY, rotZ;
 
     [Space(10)]
 
@@ -118,7 +119,7 @@ public class Clutter : MonoBehaviour
             //move the object so it can cast
             tempObj.transform.position = _loc;
 
-            cast = rb.SweepTest(Vector3.down, out hit, Mathf.Infinity);
+            cast = rb.SweepTest(-transform.up, out hit, Mathf.Infinity);
         }
 
         //otherwise spherecast it
@@ -141,12 +142,12 @@ public class Clutter : MonoBehaviour
                 mask = 1 << mask;//bitshift it
                 mask = ~mask;//we want to cast against everything else but the clutter
 
-                cast = Physics.SphereCast(_loc, sphereSize, Vector3.down, out hit, Mathf.Infinity, mask);
+                cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity, mask);
             }
 
 
             else
-                cast = Physics.SphereCast(_loc, sphereSize, Vector3.down, out hit, Mathf.Infinity);
+                cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity);
         }
 
 
@@ -168,7 +169,7 @@ public class Clutter : MonoBehaviour
 
         else
         {
-            if (Vector3.Angle(Vector3.down, hit.normal) <= (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it.
+            if (Vector3.Angle(-transform.up, hit.normal) < (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it.
             {
                 if (debug)
                     Debug.Log("Angle too sharp. Object " + tempObj.name + " not instantiated");
@@ -184,16 +185,15 @@ public class Clutter : MonoBehaviour
                 DestroyImmediate(tempObj);
                 return;
             }
+            
+            //Move object where it's supposed to            
+            tempObj.transform.position = hit.point;
+            //offset so it isn't in the ground
+            tempObj.transform.position = Vector3.MoveTowards(tempObj.transform.position, _loc, tempObj.transform.lossyScale.y * .5f);
 
-
-            //offset the hit point so the object is on the surface
-            Vector3 tempPos = hit.point;
-            tempPos.y += tempObj.transform.lossyScale.y * .5f;
-            tempObj.transform.position = tempPos;
-
-            if (faceNormal)//temp. currently overrides all other rotation values
+            if (faceNormal)
             {
-                tempObj.transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;//placeholder
+                tempObj.transform.rotation = Quaternion.FromToRotation(tempObj.transform.up, hit.normal);
             }
         }
 
@@ -227,22 +227,22 @@ public class Clutter : MonoBehaviour
         if (rotationOverride != Vector3.zero) //if there is a value in rot override                
         {
             //x
-            if (rotationOverride.x == 0 && objX)//if x is 0 and the bool is checked, return a random value
-                toReturn.x = Random.Range(0, 360);
+            if (rotationOverride.x == 0 && rotX != Vector2.zero)//if x is 0 and the bool is checked, return a random value
+                toReturn.x = Random.Range(rotX.x, rotX.y);
 
             else if (rotationOverride.x != 0) //otherwise use given value
                 toReturn.x = rotationOverride.x;
 
             //y
-            if (rotationOverride.y == 0 && objY)
-                toReturn.y = Random.Range(0, 360);
+            if (rotationOverride.y == 0 && rotY != Vector2.zero)//if x is 0 and the bool is checked, return a random value
+                toReturn.y = Random.Range(rotY.x, rotY.y);
 
             else if (rotationOverride.y != 0)
                 toReturn.y = rotationOverride.y;
 
             //z
-            if (rotationOverride.z == 0 && objZ)
-                toReturn.z = Random.Range(0, 360);
+            if (rotationOverride.y == 0 && rotZ!= Vector2.zero)//if x is 0 and the bool is checked, return a random value
+                toReturn.y = Random.Range(rotZ.x, rotZ.y);
 
             else if (rotationOverride.z != 0)
                 toReturn.z = rotationOverride.z;
@@ -253,14 +253,14 @@ public class Clutter : MonoBehaviour
 
         else//if the override is zero, just use the random bools
         {
-            if (objX)
-                toReturn.x = Random.Range(0, 360);
+            if (rotX != Vector2.zero)
+                toReturn.x = Random.Range(rotX.x, rotX.y);
 
-            if (objY)
-                toReturn.y = Random.Range(0, 360);
+            if (rotY != Vector2.zero)
+                toReturn.y = Random.Range(rotY.x, rotY.y);
 
-            if (objZ)
-                toReturn.z = Random.Range(0, 360);
+            if (rotZ != Vector2.zero)
+                toReturn.z = Random.Range(rotZ.x, rotZ.y);
 
             return toReturn;
         }
