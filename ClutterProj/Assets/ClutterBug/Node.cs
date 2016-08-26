@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+#if UNITY_EDITOR
 [ExecuteInEditMode]
 public class Node : Clutter
 {
@@ -134,3 +135,4 @@ public class Node : Clutter
         }
     }
 }
+#endif

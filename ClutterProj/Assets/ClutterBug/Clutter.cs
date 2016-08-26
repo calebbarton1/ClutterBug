@@ -3,12 +3,14 @@ using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
+#endif
 
-
+#if UNITY_EDITOR
 [ExecuteInEditMode]
 public class Clutter : MonoBehaviour
 {
-    //Made by Caleb
+    //Made by Caleb Barton
+    //github.com/calebbarton1
 
     [Tooltip("Will display console alerts to prefabs not instantiated. May cause performance drops.")]
     public bool debug = false;
