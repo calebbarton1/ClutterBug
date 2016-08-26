@@ -78,7 +78,7 @@ public class Node : Clutter
         if (!clutterParent)
             clutterParent = new GameObject("clutterParent");
 
-        //check if scale on node is negative (it shouldn't)
+        //check if scale on node is negative (it shouldn't be)
         Vector3 temp = transform.localScale;
 
         if (transform.localScale.x < 0)

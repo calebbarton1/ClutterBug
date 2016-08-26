@@ -52,6 +52,11 @@ public class Clutter : MonoBehaviour
 
     [Space(10)]
 
+    [Tooltip("The list of layers that clutter cannot spawn on (unless overlapping is enabled)")]
+    public LayerMask[] clutterMask;
+
+    [Space(10)]
+
     [Tooltip("Number of clutter created per click")]
     public int numberToSpawn = 1;
 
@@ -60,6 +65,15 @@ public class Clutter : MonoBehaviour
     [Tooltip("Objects to be created as clutter")]
     public List<GameObject> prefabList;
 
+    void Awake()
+    {
+        //initialise layer masks
+        if (clutterMask.Length == 0)
+        {
+            clutterMask = new LayerMask[1];
+            clutterMask[0] = 1 << LayerMask.NameToLayer("Clutter");
+        }
+    }
 
     public GameObject RandomObject()
     {
@@ -133,8 +147,14 @@ public class Clutter : MonoBehaviour
 
             if (allowOverlap)
             {
-                int mask = LayerMask.NameToLayer("Clutter");//grab layer of clutter
-                mask = 1 << mask;//bitshift it
+                //Grab the user defined layermasks
+                int mask = 0;
+
+                for (int index = 0; index < clutterMask.Length; ++index)
+                {
+                    mask = 1 << clutterMask[index];
+                }               
+
                 mask = ~mask;//we want to cast against everything else but the clutter
 
                 cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity, mask);
@@ -161,7 +181,7 @@ public class Clutter : MonoBehaviour
             return;
         }
 
-
+        //now check for other user variables
         else
         {
             if (Vector3.Angle(-transform.up, hit.normal) < (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it.
@@ -181,9 +201,9 @@ public class Clutter : MonoBehaviour
                 return;
             }
 
-            //Move object where it's supposed to            
+            //Move object where it's supposed to be            
             tempObj.transform.position = hit.point;
-            //offset so it isn't in the ground
+            //offset so it isn't in the ground. using movetowards so that it still works even if spawned on a wall or ceiling
             tempObj.transform.position = Vector3.MoveTowards(tempObj.transform.position, _loc, tempObj.transform.lossyScale.y * .5f);
 
             if (faceNormal)
@@ -193,9 +213,8 @@ public class Clutter : MonoBehaviour
         }
 
 
+        //if the child has a clutter child script on it, then instantiate more from prefab.
         NodeChild child = tempObj.GetComponent<NodeChild>();
-
-        //if the child has a clutter child script on it, then instantiate more clutter.
         if (child != null)
             child.SpawnObjectsInArea();
 
@@ -219,24 +238,24 @@ public class Clutter : MonoBehaviour
         Vector3 toReturn = new Vector3(0, 0, 0);
 
 
-        if (rotationOverride != Vector3.zero) //if there is a value in rot override                
+        if (rotationOverride != Vector3.zero)//checks if there is an override, but will only override user input             
         {
             //x
-            if (rotationOverride.x == 0 && rotX != Vector2.zero)//if x is 0 and the bool is checked, return a random value
+            if (rotationOverride.x == 0 && rotX != Vector2.zero)//if there is no override, then use random value
                 toReturn.x = Random.Range(rotX.x, rotX.y);
 
-            else if (rotationOverride.x != 0) //otherwise use given value
+            else if (rotationOverride.x != 0)
                 toReturn.x = rotationOverride.x;
 
             //y
-            if (rotationOverride.y == 0 && rotY != Vector2.zero)//if x is 0 and the bool is checked, return a random value
+            if (rotationOverride.y == 0 && rotY != Vector2.zero)
                 toReturn.y = Random.Range(rotY.x, rotY.y);
 
             else if (rotationOverride.y != 0)
                 toReturn.y = rotationOverride.y;
 
             //z
-            if (rotationOverride.y == 0 && rotZ != Vector2.zero)//if x is 0 and the bool is checked, return a random value
+            if (rotationOverride.y == 0 && rotZ != Vector2.zero)
                 toReturn.y = Random.Range(rotZ.x, rotZ.y);
 
             else if (rotationOverride.z != 0)
