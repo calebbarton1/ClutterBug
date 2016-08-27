@@ -52,8 +52,8 @@ public class Clutter : MonoBehaviour
 
     [Space(10)]
 
-    [Tooltip("The list of layers that clutter cannot spawn on (unless overlapping is enabled)")]
-    public LayerMask[] clutterMask;
+    [Tooltip("The layers that clutter cannot spawn on (unless overlapping is enabled)")]
+    public LayerMask clutterMask;
 
     [Space(10)]
 
@@ -65,15 +65,6 @@ public class Clutter : MonoBehaviour
     [Tooltip("Objects to be created as clutter")]
     public List<GameObject> prefabList;
 
-    void Awake()
-    {
-        //initialise layer masks
-        if (clutterMask.Length == 0)
-        {
-            clutterMask = new LayerMask[1];
-            clutterMask[0] = 1 << LayerMask.NameToLayer("Clutter");
-        }
-    }
 
     public GameObject RandomObject()
     {
@@ -147,22 +138,16 @@ public class Clutter : MonoBehaviour
 
             if (allowOverlap)
             {
-                //Grab the user defined layermasks
-                int mask = 0;
-
-                for (int index = 0; index < clutterMask.Length; ++index)
-                {
-                    mask = 1 << clutterMask[index];
-                }               
-
-                mask = ~mask;//we want to cast against everything else but the clutter
-
+                //ignore user layermasks if chosen
+                int mask = 1 << clutterMask;
                 cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity, mask);
             }
 
 
             else
+            {
                 cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity);
+            }
         }
 
 
@@ -193,7 +178,8 @@ public class Clutter : MonoBehaviour
             }
 
 
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Clutter") && !allowOverlap)//checking if another clutter is there
+
+            if ((clutterMask.value & 1 << hit.collider.gameObject.layer) != 0 && !allowOverlap)//checking if its allowed to collide with hit point
             {
                 if (debug)
                     Debug.Log("Clutter in the way. Object " + tempObj.name + " not instantiated");

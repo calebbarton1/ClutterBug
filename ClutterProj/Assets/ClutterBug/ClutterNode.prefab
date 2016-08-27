@@ -55,12 +55,15 @@ MonoBehaviour:
   allowOverlap: 0
   faceNormal: 0
   angleLimit: 45
-  objX: 0
-  objY: 0
-  objZ: 0
+  rotX: {x: 0, y: 0}
+  rotY: {x: 0, y: 0}
+  rotZ: {x: 0, y: 0}
   rotationOverride: {x: 0, y: 0, z: 0}
   randomScale: {x: 0, y: 0}
   scaleOverride: {x: 0, y: 0, z: 0}
+  clutterMask:
+    serializedVersion: 2
+    m_Bits: 256
   numberToSpawn: 1
   prefabList: []
   additive: 0

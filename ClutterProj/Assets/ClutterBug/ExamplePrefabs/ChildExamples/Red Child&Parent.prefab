@@ -112,6 +112,9 @@ MonoBehaviour:
   rotationOverride: {x: 0, y: 0, z: 0}
   randomScale: {x: 0, y: 0}
   scaleOverride: {x: 0.25, y: 0.25, z: 0.25}
+  clutterMask:
+    serializedVersion: 2
+    m_Bits: 256
   numberToSpawn: 5
   prefabList:
   - {fileID: 197144, guid: 90a29792ba94c5f45b4f202c589bb541, type: 2}

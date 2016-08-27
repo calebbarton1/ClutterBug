@@ -105,7 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 0
   allowOverlap: 0
-  faceNormal: 1
+  faceNormal: 0
   angleLimit: 45
   rotX: {x: 0, y: 0}
   rotY: {x: 0, y: 0}
@@ -113,6 +113,9 @@ MonoBehaviour:
   rotationOverride: {x: 0, y: 0, z: 0}
   randomScale: {x: 0, y: 0}
   scaleOverride: {x: 0, y: 0, z: 0}
+  clutterMask:
+    serializedVersion: 2
+    m_Bits: 256
   numberToSpawn: 3
   prefabList:
   - {fileID: 137058, guid: 9bc2e815de0af5d408904845c2425d82, type: 2}
