@@ -52,8 +52,8 @@ public class NodeChild : Clutter
             for (int index = 0; index < numberToSpawn; ++index)
             {
                 Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
-                spawnPos.y = 2;
-                InstantiateObject(spawnPos, 1.1f, distance, transform);
+                spawnPos.y = 1;
+                InstantiateObject(spawnPos, 1.5f, distance, transform);
             }
         }
 

@@ -172,17 +172,17 @@ public class Clutter : MonoBehaviour
             if (Vector3.Angle(-transform.up, hit.normal) < (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it.
             {
                 if (debug)
-                    Debug.Log("Angle too sharp. Object " + tempObj.name + " not instantiated");
+                    Debug.Log("Angle is sharper than" + angleLimit + ". Object " + tempObj.name + " not instantiated");
                 DestroyImmediate(tempObj);
                 return;
             }
 
 
 
-            if ((clutterMask.value & 1 << hit.collider.gameObject.layer) != 0 && !allowOverlap)//checking if its allowed to collide with hit point
+            if ((clutterMask.value & (1 << hit.collider.gameObject.layer)) != 0 && !allowOverlap)//checking if its allowed to collide with hit point
             {
                 if (debug)
-                    Debug.Log("Clutter in the way. Object " + tempObj.name + " not instantiated");
+                    Debug.Log("Object with selected layermask in way. Object " + tempObj.name + " not instantiated");
                 DestroyImmediate(tempObj);
                 return;
             }
