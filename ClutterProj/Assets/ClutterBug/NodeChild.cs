@@ -6,7 +6,7 @@ public class NodeChild : Clutter
 {
     [Space(10)]
 
-    [Tooltip("Distance between parent clutter and child (currently scales down with object scale. TOFIX)")]
+    [Tooltip("Distance between parent clutter and child")]
     public float distance = 1;
 
 

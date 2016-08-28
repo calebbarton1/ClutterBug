@@ -187,10 +187,8 @@ public class Clutter : MonoBehaviour
                 return;
             }
 
-            //Move object where it's supposed to be            
-            tempObj.transform.position = hit.point;
-            //offset so it isn't in the ground. using movetowards so that it still works even if spawned on a wall or ceiling
-            tempObj.transform.position = Vector3.MoveTowards(tempObj.transform.position, _loc, tempObj.transform.lossyScale.y * .5f);
+            //Move object where it's supposed to be and offset y position so it's not in collider           
+            tempObj.transform.position = hit.point + (hit.normal * (tempObj.transform.lossyScale.y * .5f));
 
             if (faceNormal)
             {

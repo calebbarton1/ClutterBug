@@ -31,10 +31,6 @@ public class InspectorButtonAttribute : PropertyAttribute
     }
 
     private float _buttonHeight = kDefaultButtonHeight;
-    private string v1;
-    private float v2;
-    private float v3;
-
     public float ButtonHeight
     {
         get { return _buttonHeight; }
