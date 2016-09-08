@@ -2,13 +2,13 @@
 
 #if UNITY_EDITOR
 [ExecuteInEditMode]
-public class Node : Clutter
+public class Node2D : Clutter2D
 {
     //enums for collider selection in inspector
     public enum colliderMenu
     {
-        Box,
-        Sphere,
+        Square,
+        Circle
     }
 
     //buttons for generating objects
@@ -21,39 +21,33 @@ public class Node : Clutter
 
     [Space(10)]
 
-
-    [InspectorButton("SpawnObjectsInArea")]//Calls this function 
-    public bool SpawnClutter;//makes a button with this bool
-
-    [Space(10)]
-
-    [InspectorButton("DeleteClutter")]
-    public bool DeleteObjects;
-
-    [Space(10)]
-
     //initialise enum and colliders
     [Tooltip("The shape of the area where objects are placed")]
-    public colliderMenu shape = colliderMenu.Box;
+    public colliderMenu shape = colliderMenu.Square;
 
     [HideInInspector]
     public GameObject clutterParent;
 
+
+    //TODO: Have transparent sprites instead of gizmo 3d objects
     public void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0.50f, 1.0f, 1.0f, 0.5f);
+        Gizmos.color = new Color(1.0f, .50f, 1.0f, 0.5f);
         switch (shape)
         {
-            case colliderMenu.Box:
-                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);//making a matrix based on the transform, draw shape based on it
+            case colliderMenu.Square:
+
+                Vector3 tempScale = new Vector3(transform.localScale.x, transform.localScale.y, 0.00001f);
+                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, tempScale);//making a matrix based on the transform, draw shape based on it
                 Gizmos.DrawCube(Vector3.zero, Vector3.one);
                 Gizmos.color = new Color(0, 0, 0, .75f);
                 Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
                 Gizmos.matrix = Matrix4x4.identity;
                 break;
 
-            case colliderMenu.Sphere:
-                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, transform.localScale);
+            case colliderMenu.Circle:
+                Vector3 tempScale1 = new Vector3(transform.localScale.x, transform.localScale.y, 0.00001f);
+                Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.localRotation, tempScale1);
                 Gizmos.DrawSphere(Vector3.zero, 1);
                 Gizmos.color = new Color(0, 0, 0, .75f);
                 Gizmos.DrawWireSphere(Vector3.zero, 1);
@@ -65,7 +59,7 @@ public class Node : Clutter
         }
     }
 
-    private void DeleteClutter()
+    public void DeleteClutter()
     {
         DestroyImmediate(clutterParent);
     }
@@ -87,32 +81,28 @@ public class Node : Clutter
         if (transform.localScale.y < 0)
             temp.y -= transform.localScale.y * 2;
 
-        if (transform.localScale.x < 0)
-            temp.z -= transform.localScale.z * 2;
-
         transform.localScale = temp;
 
         if (prefabList.Count != 0 && numberToSpawn != 0)
         {
             switch (shape)
             {
-                case colliderMenu.Box:
+                case colliderMenu.Square:
 
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
-                        Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f));//random x and z on top of box
-                        InstantiateObject(spawnPos, .45f, 1, clutterParent.transform);
+                        Vector2 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0);//random x and z on top of box
+                        InstantiateObject(spawnPos, 1, .45f, clutterParent.transform);
                     }
 
                     break;
 
-                case colliderMenu.Sphere:
+                case colliderMenu.Circle:
 
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
-                        Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
-                        spawnPos.y = 1;
-                        InstantiateObject(spawnPos, 0.9f, 1, clutterParent.transform);
+                        Vector3 spawnPos = Random.insideUnitCircle;//gets value within a sphere that has radius of 1
+                        InstantiateObject(spawnPos, 0.9f, .95f, clutterParent.transform);
                     }
 
                     break;

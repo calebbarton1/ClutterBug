@@ -139,8 +139,7 @@ public class Clutter : MonoBehaviour
             if (allowOverlap)
             {
                 //ignore user layermasks if chosen
-                int mask = 1 << clutterMask;
-                cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity, mask);
+                cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity, clutterMask);
             }
 
 
@@ -212,7 +211,7 @@ public class Clutter : MonoBehaviour
         go.transform.rotation = Quaternion.Euler(tempRot);
 
         //set the scale of the object
-        go.transform.localScale = SetScale(go);
+        go.transform.localScale = SetScale(go.transform);
 
         return go;
     }
@@ -265,14 +264,14 @@ public class Clutter : MonoBehaviour
 
     }
 
-    public Vector3 SetScale(GameObject go2)
-    {
+    public Vector3 SetScale(Transform go2)
+    { 
         Vector3 toReturn = new Vector3(0, 0, 0);
 
         if (scaleOverride == Vector3.zero && randomScale != Vector2.zero)
         {
             float rand = Random.Range(randomScale.x, randomScale.y);
-            toReturn = go2.transform.localScale * rand;
+            toReturn = go2.localScale * rand;
 
             return toReturn;
         }
@@ -283,19 +282,19 @@ public class Clutter : MonoBehaviour
                 toReturn.x = scaleOverride.x;
 
             else
-                toReturn.x = go2.transform.localScale.x;
+                toReturn.x = go2.localScale.x;
 
             if (scaleOverride.y != 0)
                 toReturn.y = scaleOverride.y;
 
             else
-                toReturn.y = go2.transform.localScale.y;
+                toReturn.y = go2.localScale.y;
 
             if (scaleOverride.z != 0)
                 toReturn.z = scaleOverride.z;
 
             else
-                toReturn.z = go2.transform.localScale.z;
+                toReturn.z = go2.localScale.z;
 
             return toReturn;
         }

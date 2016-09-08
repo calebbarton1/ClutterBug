@@ -371,8 +371,6 @@ MonoBehaviour:
   prefabList:
   - {fileID: 1000011744960936, guid: c1821e21c3e166e4aa2a9e9acd19ddc4, type: 2}
   additive: 0
-  SpawnClutter: 0
-  DeleteObjects: 0
   shape: 0
   clutterParent: {fileID: 0}
 --- !u!4 &804476413
@@ -617,6 +615,62 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!1 &1002348699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1002348701}
+  - 114: {fileID: 1002348700}
+  m_Layer: 2
+  m_Name: 2DExample
+  m_TagString: Node
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1002348700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1002348699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 730848e9cebcafa449d67d9d7287dbad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 0
+  allowOverlap: 0
+  rotZ: {x: 0, y: 0}
+  rotationOverride: 0
+  randomScale: {x: 0, y: 0}
+  scaleOverride: {x: 0, y: 0}
+  clutterMask:
+    serializedVersion: 2
+    m_Bits: 256
+  numberToSpawn: 15
+  prefabList:
+  - {fileID: 1000014264597770, guid: 9af43076d248ad747aa6bd1522c599aa, type: 2}
+  - {fileID: 1000011603042488, guid: f175126858f4c254ea14cb94508c4908, type: 2}
+  additive: 0
+  shape: 0
+  clutterParent: {fileID: 0}
+--- !u!4 &1002348701
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1002348699}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 63.3, y: 0, z: 0}
+  m_LocalScale: {x: 13.548712, y: 13.54871, z: 0.02709742}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
 --- !u!1 &1042177746
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,8 +794,6 @@ MonoBehaviour:
   prefabList:
   - {fileID: 1000011744960936, guid: c1821e21c3e166e4aa2a9e9acd19ddc4, type: 2}
   additive: 1
-  SpawnClutter: 0
-  DeleteObjects: 0
   shape: 1
   clutterParent: {fileID: 0}
 --- !u!4 &1109349552
@@ -800,9 +852,8 @@ MonoBehaviour:
   numberToSpawn: 2
   prefabList:
   - {fileID: 124542, guid: a044b97d1ccd2ca418ca5b017e805458, type: 2}
+  - {fileID: 124542, guid: a044b97d1ccd2ca418ca5b017e805458, type: 2}
   additive: 0
-  SpawnClutter: 0
-  DeleteObjects: 0
   shape: 0
   clutterParent: {fileID: 0}
 --- !u!4 &1175514021
@@ -862,8 +913,6 @@ MonoBehaviour:
   prefabList:
   - {fileID: 1000014014041376, guid: e3cfac8a8aa65e74483ef2deeec4560b, type: 2}
   additive: 0
-  SpawnClutter: 0
-  DeleteObjects: 0
   shape: 0
   clutterParent: {fileID: 0}
 --- !u!4 &1224283603
