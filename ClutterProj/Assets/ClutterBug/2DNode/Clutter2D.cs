@@ -88,14 +88,13 @@ public class Clutter2D : MonoBehaviour
         SpriteRenderer mesh = tempObj.GetComponent<SpriteRenderer>();
 
         //check if another 2d collider is there       
-        if (Physics2D.OverlapBox(_loc, mesh.bounds.size, 0, clutterMask))
+        if (Physics2D.OverlapBox(_loc, mesh.bounds.size, 0, clutterMask) && !allowOverlap)
         {
             if (debug)
-            {
                 Debug.Log("Object with selected layermask in way. Object " + tempObj.name + " not instantiated");
-                DestroyImmediate(tempObj);
-                return;
-            }
+
+            DestroyImmediate(tempObj);
+            return;
         }
 
         tempObj.transform.position = _loc;

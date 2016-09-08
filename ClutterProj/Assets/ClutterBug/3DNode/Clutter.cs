@@ -26,7 +26,7 @@ public class Clutter : MonoBehaviour
 
     [Tooltip("If the collider's angle is less than this value, the clutter wont spawn.")]
     [Range(0, 89)]
-    public int angleLimit = 45;
+    public float angleLimit = 45;
 
     [Tooltip("Randomised rotation value between a Min and Max. Is overriden by rotation override.")]
     [Header("Randomise Rotation")]
@@ -265,7 +265,7 @@ public class Clutter : MonoBehaviour
     }
 
     public Vector3 SetScale(Transform go2)
-    { 
+    {
         Vector3 toReturn = new Vector3(0, 0, 0);
 
         if (scaleOverride == Vector3.zero && randomScale != Vector2.zero)

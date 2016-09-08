@@ -780,9 +780,9 @@ MonoBehaviour:
   debug: 0
   allowOverlap: 0
   faceNormal: 0
-  angleLimit: 7
+  angleLimit: 45
   rotX: {x: 0, y: 0}
-  rotY: {x: 0, y: 360}
+  rotY: {x: 0, y: 0}
   rotZ: {x: 0, y: 0}
   rotationOverride: {x: 0, y: 0, z: 0}
   randomScale: {x: 0.5, y: 1}
