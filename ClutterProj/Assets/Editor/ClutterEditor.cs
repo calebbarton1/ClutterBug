@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿// Copyright (C) 2016 Caleb Barton (caleb.barton@hotmail.com)
+//github.com/calebbarton1
+//Released under MIT License
+//https://opensource.org/licenses/MIT
+
+using UnityEngine;
 using System.Collections.Generic;
 
 #if UNITY_EDITOR

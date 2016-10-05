@@ -7,10 +7,11 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 [ExecuteInEditMode]
-public class NodeChild : Clutter
+public class Node2DChild : Clutter2D
 {
     [Space(10)]
 
+    [Tooltip("Distance between parent clutter and child")]
     public float distance = 1;
 
     public void SpawnObjectsInArea()
@@ -24,22 +25,19 @@ public class NodeChild : Clutter
         if (transform.localScale.y < 0)
             temp.y -= transform.localScale.y * 2;
 
-        if (transform.localScale.x < 0)
-            temp.z -= transform.localScale.z * 2;
-
         transform.localScale = temp;
 
-        Mesh col = GetComponent<MeshFilter>().sharedMesh;
+        SpriteRenderer col = GetComponent<SpriteRenderer>();
 
         //so objects aren't being spawned inside their parent. Their parent is essentially another node.
         {
             //use the largest value of the scale to ensure objects aren't inside parent
             float toMove;
-            if (col.bounds.extents.x > col.bounds.extents.z)
-                toMove = col.bounds.extents.x;
+            if (col.bounds.size.x > col.bounds.size.y)
+                toMove = col.bounds.size.x;
 
             else
-                toMove = col.bounds.extents.z;
+                toMove = col.bounds.size.y;
 
             distance = distance + toMove;
 
@@ -53,9 +51,8 @@ public class NodeChild : Clutter
         {
             for (int index = 0; index < numberToSpawn; ++index)
             {
-                Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
-                spawnPos.y = 1;
-                InstantiateObject(spawnPos, 1.5f, distance, transform);
+                Vector2 spawnPos = Random.insideUnitCircle;//gets value within a sphere that has radius of 1
+                InstantiateObject(spawnPos, 1f, distance, transform);
             }
         }
 

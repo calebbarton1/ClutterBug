@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿// Copyright (C) 2016 Caleb Barton (caleb.barton@hotmail.com)
+//github.com/calebbarton1
+//Released under MIT License
+//https://opensource.org/licenses/MIT
+
+using UnityEngine;
 using System.Collections.Generic;
 
 #if UNITY_EDITOR
@@ -9,60 +14,43 @@ using UnityEditor;
 [ExecuteInEditMode]
 public class Clutter : MonoBehaviour
 {
-    //Made by Caleb Barton
-    //github.com/calebbarton1
-
-    [Tooltip("Will display console alerts to prefabs not instantiated. May cause performance drops.")]
     public bool debug = false;
 
     [Space(10)]
 
-    [Tooltip("If enabled, clutter can overlap each other.")]
     public bool allowOverlap = false;
 
 
-    [Tooltip("Object will face surface normal")]
     public bool faceNormal = false;
 
-    [Tooltip("If the collider's angle is less than this value, the clutter wont spawn.")]
     [Range(0, 89)]
     public float angleLimit = 45;
 
-    [Tooltip("Randomised rotation value between a Min and Max. Is overriden by rotation override.")]
-    [Header("Randomise Rotation")]
-    public Vector2 rotX;
-    [Tooltip("Randomised rotation value between a Min and Max. Is overriden by rotation override.")]
-    public Vector2 rotY, rotZ;
+  
+    public Vector2 rotX, rotY, rotZ;
 
     [Space(10)]
 
-    [Tooltip("Overrides prefab rotation and random rotation. Leave at zero to use prefab setting.")]
     public Vector3 rotationOverride;
 
     [Space(10)]
 
-    //temporary. will build custom inspector later for two varaible inputs
-    [Tooltip("Will scale objects between two variables.")]
     public Vector2 randomScale;
 
     [Space(10)]
 
-    [Tooltip("Overrides prefab scale. Leave at zero to use prefab setting.")]
     public Vector3 scaleOverride = Vector3.zero;
 
     [Space(10)]
 
-    [Tooltip("The layers that clutter cannot spawn on (unless overlapping is enabled)")]
     public LayerMask clutterMask;
 
     [Space(10)]
 
-    [Tooltip("Number of clutter created per click")]
     public int numberToSpawn = 1;
 
     [Space(5)]
 
-    [Tooltip("Objects to be created as clutter")]
     public List<GameObject> prefabList;
 
 

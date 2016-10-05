@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012889811462}
   - 212: {fileID: 212000013774209422}
-  - 60: {fileID: 60000013122216090}
+  - 61: {fileID: 61000012162436630}
   m_Layer: 8
   m_Name: Test2DTriangle
   m_TagString: Untagged
@@ -41,8 +41,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!60 &60000013122216090
-PolygonCollider2D:
+--- !u!61 &61000012162436630
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -53,11 +53,8 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
-  m_Points:
-    m_Paths:
-    - - {x: -0.43301272, y: -0.24999994}
-      - {x: 0.43301272, y: -0.25000003}
-      - {x: 0, y: 0.5}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
 --- !u!212 &212000013774209422
 SpriteRenderer:
   m_ObjectHideFlags: 1

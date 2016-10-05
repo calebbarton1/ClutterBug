@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿// Copyright (C) 2016 Caleb Barton (caleb.barton@hotmail.com)
+//github.com/calebbarton1
+//Released under MIT License
+//https://opensource.org/licenses/MIT
+
+using UnityEngine;
 
 #if UNITY_EDITOR
 [ExecuteInEditMode]
@@ -11,18 +16,13 @@ public class Node : Clutter
         Sphere,
     }
 
-    //buttons for generating objects
-    //credit to "zaikman" for the script
-
     [Space(10)]
 
-    [Tooltip("Adds clutter per click instead of rerolling")]
     public bool additive = false;
 
     [Space(10)]
 
     //initialise enum and colliders
-    [Tooltip("The shape of the area where objects are placed")]
     public colliderMenu shape = colliderMenu.Box;
 
     [HideInInspector]
