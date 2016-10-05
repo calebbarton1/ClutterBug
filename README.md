@@ -1,6 +1,4 @@
 # ClutterBug
-Tutorial for program can be found here:
-https://calebbartonblog.wordpress.com/2016/08/22/clutterbug-tutorial/
 
 If you have any questions contact me at caleb.barton@hotmail.com
 
