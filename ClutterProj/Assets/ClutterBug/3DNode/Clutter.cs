@@ -127,7 +127,7 @@ public class Clutter : MonoBehaviour
             if (allowOverlap)
             {
                 //ignore user layermasks if chosen
-                cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity, clutterMask);
+                cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity, ~clutterMask);
             }
 
 
