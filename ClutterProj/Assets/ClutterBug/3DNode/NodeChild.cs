@@ -29,19 +29,18 @@ public class NodeChild : Clutter
 
         transform.localScale = temp;
 
-        Mesh col = GetComponent<MeshFilter>().sharedMesh;
 
         //so objects aren't being spawned inside their parent. Their parent is essentially another node.
         {
             //use the largest value of the scale to ensure objects aren't inside parent
             float toMove;
-            if (col.bounds.extents.x > col.bounds.extents.z)
-                toMove = col.bounds.extents.x;
+            if (col.bounds.size.x > col.bounds.size.z)
+                toMove = col.bounds.size.x;
 
             else
-                toMove = col.bounds.extents.z;
+                toMove = col.bounds.size.z;
 
-            distance = distance + toMove;
+            distance += toMove;
 
             if (distance == 0)
                 distance = 1;

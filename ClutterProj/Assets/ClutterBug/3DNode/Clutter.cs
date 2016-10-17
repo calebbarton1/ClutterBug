@@ -156,10 +156,11 @@ public class Clutter : MonoBehaviour
         //now check for other user variables
         else
         {
-            if (Vector3.Angle(-transform.up, hit.normal) < (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it.
+            float angle = Vector3.Angle(-transform.up, hit.normal);
+            if (angle < (180 - angleLimit))//determines if an object will spawn depending on the angle of the collider below it.
             {
                 if (debug)
-                    Debug.Log("Angle is sharper than" + angleLimit + ". Object " + tempObj.name + " not instantiated");
+                    Debug.Log("Angle is sharper than " + angleLimit + ". Object " + tempObj.name + " not instantiated");
                 DestroyImmediate(tempObj);
                 return;
             }
