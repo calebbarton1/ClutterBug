@@ -95,6 +95,7 @@ public class Node2D : Clutter2D
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
                         Vector2 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0);//random x and z on top of box
+                        clutterParent.transform.localPosition = transform.position;
                         InstantiateObject(spawnPos, 1, .45f, clutterParent.transform);
                     }
 

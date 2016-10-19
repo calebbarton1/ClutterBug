@@ -20,6 +20,14 @@ public class Clutter2D : MonoBehaviour
     public bool debug = false;
     public bool allowOverlap = false;
 
+    public SortingLayer sortingLayer;
+
+    public Vector2 randomOrderLayer;
+    public int orderLayerOverride = 0;
+
+    public Vector2 posX, posY;
+    public Vector2 positionOverride;
+
     public Vector2 rotZ;
     public float rotationOverride;
 
@@ -65,6 +73,14 @@ public class Clutter2D : MonoBehaviour
         //get collider info
         SpriteRenderer mesh = tempObj.GetComponent<SpriteRenderer>();
 
+        if (orderLayerOverride == 0)
+        {
+            mesh.sortingOrder = (int)Random.Range(randomOrderLayer.x, randomOrderLayer.y + 1);
+        }
+
+        else
+            mesh.sortingOrder = orderLayerOverride;
+
         //check if another 2d collider is there       
         if (Physics2D.OverlapBox(_loc, mesh.bounds.size, 0, clutterMask) && !allowOverlap)
         {
@@ -75,13 +91,59 @@ public class Clutter2D : MonoBehaviour
             return;
         }
 
-        tempObj.transform.position = _loc;
+        //Postion
+        {
+            _loc = toParent.position - _loc;//offset the location so its relative to parent
+
+            if (positionOverride != Vector2.zero)
+            {
+
+                //x
+                if (positionOverride.x == 0 && posX != Vector2.zero)
+                {
+                    _loc.x = Random.Range(posX.x, posX.y);
+                }
+
+                else if (positionOverride.x != 0)
+                {
+                    _loc.x = positionOverride.x;
+                }
+
+                //x
+                if (positionOverride.y == 0 && posY != Vector2.zero)
+                {
+                    _loc.y = Random.Range(posY.x, posY.y);
+                }
+
+                else if (positionOverride.y != 0)
+                {
+                    _loc.y = positionOverride.y;
+                }
+
+                tempObj.transform.localPosition = _loc;
+            }
+
+
+            else
+            {
+                if (posX != Vector2.zero)
+                    _loc.x = Random.Range(posX.x, posX.y);
+
+
+                if (posY != Vector2.zero)
+                    _loc.y = Random.Range(posY.x, posY.y);
+
+                tempObj.transform.localPosition = _loc;
+            }
+        }
+
+
 
         //if the child has a clutter child script on it, then instantiate more from prefab.
         //TODO: Get 2D children working
-        Node2DChild child = tempObj.GetComponent<Node2DChild>();
-        if (child != null)
-            child.SpawnObjectsInArea();
+        //Node2DChild child = tempObj.GetComponent<Node2DChild>();
+        //if (child != null)
+        //child.SpawnObjectsInArea();
 
     }
 

@@ -332,10 +332,70 @@ public class Node2DInspector : Editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
+        if (nodeScript.orderLayerOverride == 0)
+        {
+            EditorGUILayout.LabelField("Random Order in Layer");
+
+            //Showing the vector2 values as min/max
+            //X
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Min", GUILayout.Width(30));
+            nodeScript.randomOrderLayer.x = EditorGUILayout.FloatField(nodeScript.randomOrderLayer.x);
+            EditorGUILayout.LabelField("Max", GUILayout.Width(30));
+            nodeScript.randomOrderLayer.y = EditorGUILayout.FloatField(nodeScript.randomOrderLayer.y);
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Separator();
+        }
+
+        nodeScript.orderLayerOverride = (int)EditorGUILayout.FloatField("Order Layer", nodeScript.orderLayerOverride);
+
+
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+
+
+        if (nodeScript.positionOverride == Vector2.zero)
+        {
+            EditorGUILayout.LabelField("Random Position");
+
+            //Showing the vector2 values as min/max
+            //X
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("X Position");
+            EditorGUILayout.LabelField("Min", GUILayout.Width(30));
+            nodeScript.posX.x = EditorGUILayout.FloatField(nodeScript.posX.x);
+            EditorGUILayout.LabelField("Max", GUILayout.Width(30));
+            nodeScript.posX.y = EditorGUILayout.FloatField(nodeScript.posX.y);
+            EditorGUILayout.EndHorizontal();
+
+            //Y
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Y Position");
+            EditorGUILayout.LabelField("Min", GUILayout.Width(30));
+            nodeScript.posY.x = EditorGUILayout.FloatField(nodeScript.posY.x);
+            EditorGUILayout.LabelField("Max", GUILayout.Width(30));
+            nodeScript.posY.y = EditorGUILayout.FloatField(nodeScript.posY.y);
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Separator();
+        }
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("Override Position");
+        EditorGUILayout.LabelField("X", GUILayout.Width(30));
+        nodeScript.positionOverride.x = EditorGUILayout.FloatField(nodeScript.positionOverride.x);
+        EditorGUILayout.LabelField("Y", GUILayout.Width(30));
+        nodeScript.positionOverride.y = EditorGUILayout.FloatField(nodeScript.positionOverride.y);
+        EditorGUILayout.EndHorizontal();
+        
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+
+
         if (nodeScript.rotationOverride == 0)
         {
             //Showing the vector2 values as min/max
-            //X
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Random Rotation");
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
