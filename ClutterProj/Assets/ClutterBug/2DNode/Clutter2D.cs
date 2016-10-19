@@ -18,35 +18,18 @@ public class Clutter2D : MonoBehaviour
     //github.com/calebbarton1
 
     public bool debug = false;
-
-    [Space(10)]
-
     public bool allowOverlap = false;
 
     public Vector2 rotZ;
-
-    [Space(10)]
-
     public float rotationOverride;
-
-    [Space(10)]
 
     //temporary. will build custom inspector later for two varaible inputs
     public Vector2 randomScale;
-
-    [Space(10)]
-
     public Vector2 scaleOverride = Vector2.zero;
-
-    [Space(10)]
 
     public LayerMask clutterMask;
 
-    [Space(10)]
-
     public int numberToSpawn = 1;
-
-    [Space(5)]
 
     public List<GameObject> prefabList;
 

@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4467886, g: 0.4913934, b: 0.5470124, a: 1}
+  m_IndirectSpecularColor: {r: 0.4467892, g: 0.49139404, b: 0.5470132, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -369,7 +369,7 @@ MonoBehaviour:
     m_Bits: 256
   numberToSpawn: 10
   prefabList:
-  - {fileID: 1000011744960936, guid: c1821e21c3e166e4aa2a9e9acd19ddc4, type: 2}
+  - {fileID: 0}
   additive: 0
   shape: 0
   clutterParent: {fileID: 0}
@@ -653,8 +653,8 @@ MonoBehaviour:
     m_Bits: 256
   numberToSpawn: 20
   prefabList:
-  - {fileID: 1000014264597770, guid: 9af43076d248ad747aa6bd1522c599aa, type: 2}
   - {fileID: 1000011603042488, guid: f175126858f4c254ea14cb94508c4908, type: 2}
+  - {fileID: 1000014264597770, guid: 9af43076d248ad747aa6bd1522c599aa, type: 2}
   additive: 0
   shape: 0
   clutterParent: {fileID: 0}
@@ -792,7 +792,7 @@ MonoBehaviour:
     m_Bits: 256
   numberToSpawn: 78
   prefabList:
-  - {fileID: 1000011744960936, guid: c1821e21c3e166e4aa2a9e9acd19ddc4, type: 2}
+  - {fileID: 0}
   additive: 0
   shape: 1
   clutterParent: {fileID: 0}
@@ -911,7 +911,7 @@ MonoBehaviour:
     m_Bits: 256
   numberToSpawn: 1000
   prefabList:
-  - {fileID: 1000014014041376, guid: e3cfac8a8aa65e74483ef2deeec4560b, type: 2}
+  - {fileID: 0}
   additive: 0
   shape: 0
   clutterParent: {fileID: 0}

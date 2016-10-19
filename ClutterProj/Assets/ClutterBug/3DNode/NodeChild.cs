@@ -29,6 +29,7 @@ public class NodeChild : Clutter
 
         transform.localScale = temp;
 
+        Mesh col = GetComponent<MeshFilter>().sharedMesh;
 
         //so objects aren't being spawned inside their parent. Their parent is essentially another node.
         {
