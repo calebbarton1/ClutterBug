@@ -70,10 +70,7 @@ public class Node2D : Clutter2D
     public void SpawnObjectsInArea()
     {
         if (!additive)
-            DeleteClutter(); //Delete previously placed objects
-
-        if (!clutterParent)
-            clutterParent = new GameObject("clutterParent");
+            DeleteClutter(); //Delete previously placed objects        
 
         //check if scale on node is negative (it shouldn't be)
         Vector3 temp = transform.localScale;
@@ -86,17 +83,40 @@ public class Node2D : Clutter2D
 
         transform.localScale = temp;
 
+        if (!clutterParent)
+        {
+            clutterParent = new GameObject("clutterParent");
+            //clutterParent.transform.localPosition = transform.position;
+        }
+
+        //else if (transform.position != clutterParent.transform.position)
+        //{
+        //    clutterParent = new GameObject("clutterParent");
+        //    clutterParent.transform.localPosition = transform.position;
+        //}
+
+        //else
+        //    clutterParent.transform.localPosition = transform.position;
+
         if (prefabList.Count != 0 && numberToSpawn != 0)
         {
+            clutterParent.transform.position = transform.position;
+
             switch (shape)
             {
                 case colliderMenu.Square:
 
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
-                        Vector2 spawnPos = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0);//random x and z on top of box
-                        clutterParent.transform.localPosition = transform.position;
-                        InstantiateObject(spawnPos, 1, .45f, clutterParent.transform);
+                        Vector2 spawnPos = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x and y on top of box
+
+                        if (positionOverride.x != 0)//if we're overriding the position, we do it here and clamp it so that collision is correctly calculated
+                            spawnPos.x = Mathf.Clamp(positionOverride.x, -1, 1);
+
+                        if (positionOverride.y != 0)
+                            spawnPos.y = Mathf.Clamp(positionOverride.y, -1, 1);
+
+                        InstantiateObject(spawnPos, .5f , 1, clutterParent.transform);
                     }
 
                     break;
@@ -105,8 +125,15 @@ public class Node2D : Clutter2D
 
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
-                        Vector3 spawnPos = Random.insideUnitCircle;//gets value within a sphere that has radius of 1
-                        InstantiateObject(spawnPos, 0.9f, .95f, clutterParent.transform);
+                        Vector2 spawnPos = Random.insideUnitCircle;//gets value within a sphere that has radius of 1
+
+                        if (positionOverride.x != 0)
+                            spawnPos.x = Mathf.Clamp(positionOverride.x, -1, 1);
+
+                        if (positionOverride.y != 0)
+                            spawnPos.y = Mathf.Clamp(positionOverride.y, -1, 1);
+
+                        InstantiateObject(spawnPos, 1f, 1, clutterParent.transform);
                     }
 
                     break;

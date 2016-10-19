@@ -369,7 +369,7 @@ MonoBehaviour:
     m_Bits: 256
   numberToSpawn: 10
   prefabList:
-  - {fileID: 0}
+  - {fileID: 1000011744960936, guid: c1821e21c3e166e4aa2a9e9acd19ddc4, type: 2}
   additive: 0
   shape: 0
   clutterParent: {fileID: 0}
@@ -477,6 +477,7 @@ GameObject:
   - 92: {fileID: 959427036}
   - 124: {fileID: 959427035}
   - 81: {fileID: 959427034}
+  - 114: {fileID: 959427039}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -552,6 +553,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &959427039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 959427033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a566b4b1f85ac54bb1e085d5a00a792, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &970673210
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,6 +656,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 0
   allowOverlap: 0
+  randomOrderLayer: {x: 0, y: 0}
+  orderLayerOverride: 0
+  positionOverride: {x: 0, y: 0}
   rotZ: {x: 0, y: 0}
   rotationOverride: 0
   randomScale: {x: 0, y: 0}
@@ -651,7 +666,7 @@ MonoBehaviour:
   clutterMask:
     serializedVersion: 2
     m_Bits: 256
-  numberToSpawn: 20
+  numberToSpawn: 50
   prefabList:
   - {fileID: 1000011603042488, guid: f175126858f4c254ea14cb94508c4908, type: 2}
   - {fileID: 1000014264597770, guid: 9af43076d248ad747aa6bd1522c599aa, type: 2}
@@ -665,8 +680,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1002348699}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 63.3, y: 0, z: 0}
-  m_LocalScale: {x: 13.548712, y: 13.54871, z: 0.02709742}
+  m_LocalPosition: {x: 59.1, y: 3.2, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -777,7 +792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580376ef904d6264abee61c311c7a717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 0
+  debug: 1
   allowOverlap: 0
   faceNormal: 0
   angleLimit: 89
@@ -792,7 +807,7 @@ MonoBehaviour:
     m_Bits: 256
   numberToSpawn: 78
   prefabList:
-  - {fileID: 0}
+  - {fileID: 1000011744960936, guid: c1821e21c3e166e4aa2a9e9acd19ddc4, type: 2}
   additive: 0
   shape: 1
   clutterParent: {fileID: 0}
@@ -836,7 +851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580376ef904d6264abee61c311c7a717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 0
+  debug: 1
   allowOverlap: 0
   faceNormal: 0
   angleLimit: 89
@@ -898,7 +913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 0
   allowOverlap: 0
-  faceNormal: 0
+  faceNormal: 1
   angleLimit: 45
   rotX: {x: 0, y: 0}
   rotY: {x: 0, y: 0}
@@ -911,7 +926,8 @@ MonoBehaviour:
     m_Bits: 256
   numberToSpawn: 1000
   prefabList:
-  - {fileID: 0}
+  - {fileID: 1000011744960936, guid: c1821e21c3e166e4aa2a9e9acd19ddc4, type: 2}
+  - {fileID: 1000014014041376, guid: e3cfac8a8aa65e74483ef2deeec4560b, type: 2}
   additive: 0
   shape: 0
   clutterParent: {fileID: 0}

@@ -354,33 +354,6 @@ public class Node2DInspector : Editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
-
-        if (nodeScript.positionOverride == Vector2.zero)
-        {
-            EditorGUILayout.LabelField("Random Position");
-
-            //Showing the vector2 values as min/max
-            //X
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("X Position");
-            EditorGUILayout.LabelField("Min", GUILayout.Width(30));
-            nodeScript.posX.x = EditorGUILayout.FloatField(nodeScript.posX.x);
-            EditorGUILayout.LabelField("Max", GUILayout.Width(30));
-            nodeScript.posX.y = EditorGUILayout.FloatField(nodeScript.posX.y);
-            EditorGUILayout.EndHorizontal();
-
-            //Y
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Y Position");
-            EditorGUILayout.LabelField("Min", GUILayout.Width(30));
-            nodeScript.posY.x = EditorGUILayout.FloatField(nodeScript.posY.x);
-            EditorGUILayout.LabelField("Max", GUILayout.Width(30));
-            nodeScript.posY.y = EditorGUILayout.FloatField(nodeScript.posY.y);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Separator();
-        }
-
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Override Position");
         EditorGUILayout.LabelField("X", GUILayout.Width(30));
