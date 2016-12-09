@@ -82,6 +82,12 @@ public class NodeInspector : Editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
+        nodeScript.lockX = EditorGUILayout.Toggle("Lock X Postion", nodeScript.lockX);
+        nodeScript.lockZ = EditorGUILayout.Toggle("Lock Z Postion", nodeScript.lockZ);
+
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+
         if (nodeScript.rotationOverride == Vector3.zero)
         {
             EditorGUILayout.LabelField("Random Rotation");
@@ -196,6 +202,12 @@ public class NodeChildInspector : Editor
         nodeScript.allowOverlap = EditorGUILayout.Toggle("Enable Clutter Overlap", nodeScript.allowOverlap);
         nodeScript.faceNormal = EditorGUILayout.Toggle("Rotate to Surface Normal", nodeScript.faceNormal);
         nodeScript.angleLimit = EditorGUILayout.Slider("Surface Angle Limit", nodeScript.angleLimit, 0, 89);
+
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+
+        nodeScript.lockX = EditorGUILayout.Toggle("Lock X Postion", nodeScript.lockX);
+        nodeScript.lockZ = EditorGUILayout.Toggle("Lock Z Postion", nodeScript.lockZ);
 
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
@@ -354,14 +366,9 @@ public class Node2DInspector : Editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Override Position");
-        EditorGUILayout.LabelField("X", GUILayout.Width(30));
-        nodeScript.positionOverride.x = EditorGUILayout.FloatField(nodeScript.positionOverride.x);
-        EditorGUILayout.LabelField("Y", GUILayout.Width(30));
-        nodeScript.positionOverride.y = EditorGUILayout.FloatField(nodeScript.positionOverride.y);
-        EditorGUILayout.EndHorizontal();
-        
+        nodeScript.lockX = EditorGUILayout.Toggle("Lock X Postion",nodeScript.lockX);
+        nodeScript.lockY = EditorGUILayout.Toggle("Lock Y Postion",nodeScript.lockY);
+
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 

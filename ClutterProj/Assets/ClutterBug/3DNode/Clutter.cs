@@ -16,40 +16,23 @@ public class Clutter : MonoBehaviour
 {
     public bool debug = false;
 
-    [Space(10)]
-
     public bool allowOverlap = false;
 
-
     public bool faceNormal = false;
-
-    [Range(0, 89)]
+    
     public float angleLimit = 45;
-
   
     public Vector2 rotX, rotY, rotZ;
 
-    [Space(10)]
-
     public Vector3 rotationOverride;
-
-    [Space(10)]
 
     public Vector2 randomScale;
 
-    [Space(10)]
-
     public Vector3 scaleOverride = Vector3.zero;
-
-    [Space(10)]
 
     public LayerMask clutterMask;
 
-    [Space(10)]
-
     public int numberToSpawn = 1;
-
-    [Space(5)]
 
     public List<GameObject> prefabList;
 

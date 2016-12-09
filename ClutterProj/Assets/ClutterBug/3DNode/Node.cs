@@ -15,13 +15,10 @@ public class Node : Clutter
         Box,
         Sphere,
     }
-
-    [Space(10)]
-
     public bool additive = false;
 
-    [Space(10)]
-
+    public bool lockX = false;
+    public bool lockZ = false;
     //initialise enum and colliders
     public colliderMenu shape = colliderMenu.Box;
 
@@ -90,6 +87,13 @@ public class Node : Clutter
                     for (int index = 0; index < numberToSpawn; ++index)
                     {
                         Vector3 spawnPos = new Vector3(Random.Range(-1f, 1f), 1, Random.Range(-1f, 1f));//random x and z on top of box
+
+                        if (lockX)
+                            spawnPos.x = 0;
+
+                        if (lockZ)
+                            spawnPos.z = 0;
+
                         InstantiateObject(spawnPos, .45f, 1, clutterParent.transform);
                     }
 
@@ -101,6 +105,13 @@ public class Node : Clutter
                     {
                         Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
                         spawnPos.y = 1;
+
+                        if (lockX)
+                            spawnPos.x = 0;
+
+                        if (lockZ)
+                            spawnPos.z = 0;
+
                         InstantiateObject(spawnPos, 0.9f, 1, clutterParent.transform);
                     }
 

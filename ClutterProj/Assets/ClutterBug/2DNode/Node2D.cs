@@ -16,14 +16,10 @@ public class Node2D : Clutter2D
         Circle
     }
 
-    //buttons for generating objects
-    //credit to "zaikman" for the script
-
-    [Space(10)]
-
     public bool additive = false;
 
-    [Space(10)]
+    public bool lockX = false;
+    public bool lockY = false;
 
     //initialise enum and colliders
     public colliderMenu shape = colliderMenu.Square;
@@ -110,11 +106,11 @@ public class Node2D : Clutter2D
                     {
                         Vector2 spawnPos = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));//random x and y on top of box
 
-                        if (positionOverride.x != 0)//if we're overriding the position, we do it here and clamp it so that collision is correctly calculated
-                            spawnPos.x = Mathf.Clamp(positionOverride.x, -1, 1);
+                        if (lockX)
+                            spawnPos.x = 0;
 
-                        if (positionOverride.y != 0)
-                            spawnPos.y = Mathf.Clamp(positionOverride.y, -1, 1);
+                        if (lockY)
+                            spawnPos.y = 0;
 
                         InstantiateObject(spawnPos, .5f , 1, clutterParent.transform);
                     }
@@ -127,11 +123,11 @@ public class Node2D : Clutter2D
                     {
                         Vector2 spawnPos = Random.insideUnitCircle;//gets value within a sphere that has radius of 1
 
-                        if (positionOverride.x != 0)
-                            spawnPos.x = Mathf.Clamp(positionOverride.x, -1, 1);
+                        if (lockX)
+                            spawnPos.x = 0;
 
-                        if (positionOverride.y != 0)
-                            spawnPos.y = Mathf.Clamp(positionOverride.y, -1, 1);
+                        if (lockY)
+                            spawnPos.y = 0;
 
                         InstantiateObject(spawnPos, 1f, 1, clutterParent.transform);
                     }

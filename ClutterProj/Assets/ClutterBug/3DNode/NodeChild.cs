@@ -13,8 +13,12 @@ public class NodeChild : Clutter
 
     public float distance = 1;
 
+    public bool lockX = false;
+    public bool lockZ = false;
+
     public void SpawnObjectsInArea()
     {
+        Node parent = GetComponentInParent<Node>();
         //check if prefab has negative scale (it shouldn't)
         Vector3 temp = transform.localScale;
 
@@ -55,6 +59,13 @@ public class NodeChild : Clutter
             {
                 Vector3 spawnPos = Random.insideUnitSphere;//gets value within a sphere that has radius of 1
                 spawnPos.y = 1;
+
+                if (lockX)
+                    spawnPos.x = 0;
+
+                if (lockZ)
+                    spawnPos.z = 0;
+
                 InstantiateObject(spawnPos, 1.5f, distance, transform);
             }
         }
