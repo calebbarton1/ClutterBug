@@ -18,7 +18,6 @@ public class NodeChild : Clutter
 
     public void SpawnObjectsInArea()
     {
-        Node parent = GetComponentInParent<Node>();
         //check if prefab has negative scale (it shouldn't)
         Vector3 temp = transform.localScale;
 

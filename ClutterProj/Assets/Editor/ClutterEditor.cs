@@ -65,12 +65,46 @@ public class NodeInspector : Editor
         nodeScript.numberToSpawn = EditorGUILayout.IntField("Number of Clutter", nodeScript.numberToSpawn);
 
         EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+        //so the prefab wieghts is always the same length
 
-        //draw list
-        var property = serializedObject.FindProperty("prefabList");
+        //ShowList(serializedObject.FindProperty("prefabList"), serializedObject.FindProperty("prefabWeights"), true);
+
         serializedObject.Update();
-        EditorGUILayout.PropertyField(property, true);
+        SerializedProperty list1 = serializedObject.FindProperty("prefabList");
+        EditorGUILayout.PropertyField(list1);
+        EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));// this is a problem. The user can edit this, but it doesn't update the list like a normal property field list
+
+        //TODO: Fix this shit right here
+        while (list1.arraySize > nodeScript.prefabList.Count)
+            nodeScript.prefabList.Add(nodeScript.prefabList[0]);
+        while (list1.arraySize < nodeScript.prefabList.Count)
+            nodeScript.prefabList.RemoveAt(nodeScript.prefabList.Count - 1);
+
+        while (nodeScript.prefabWeights.Count < nodeScript.prefabList.Count)
+            nodeScript.prefabWeights.Add(1f);
+        while (nodeScript.prefabWeights.Count > nodeScript.prefabList.Count)
+            nodeScript.prefabWeights.RemoveAt(nodeScript.prefabWeights.Count - 1);
+
+        SerializedProperty list2 = serializedObject.FindProperty("prefabWeights");
+
+        serializedObject.Update();
+
+        if (list1.isExpanded)
+        {
+            //EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));
+            for (int index = 0; index < list1.arraySize; ++index)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PropertyField(list1.GetArrayElementAtIndex(index), GUIContent.none);
+                EditorGUILayout.LabelField("Weight", GUILayout.Width(60));
+                EditorGUILayout.PropertyField(list2.GetArrayElementAtIndex(index), GUIContent.none);
+                EditorGUILayout.EndHorizontal();
+            }
+        }
         serializedObject.ApplyModifiedProperties();
+               
 
         EditorGUILayout.Separator();
 
@@ -141,7 +175,6 @@ public class NodeInspector : Editor
         }
         nodeScript.scaleOverride = EditorGUILayout.Vector3Field("Scale Override", nodeScript.scaleOverride);
     }
-
 
     //Getting the Layers to draw into the inspector
     static LayerMask LayerMaskField(string label, LayerMask layerMask)
@@ -366,8 +399,8 @@ public class Node2DInspector : Editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
-        nodeScript.lockX = EditorGUILayout.Toggle("Lock X Postion",nodeScript.lockX);
-        nodeScript.lockY = EditorGUILayout.Toggle("Lock Y Postion",nodeScript.lockY);
+        nodeScript.lockX = EditorGUILayout.Toggle("Lock X Postion", nodeScript.lockX);
+        nodeScript.lockY = EditorGUILayout.Toggle("Lock Y Postion", nodeScript.lockY);
 
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
