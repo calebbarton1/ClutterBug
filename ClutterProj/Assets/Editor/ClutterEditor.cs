@@ -221,31 +221,11 @@ public class NodeChildInspector : Editor
         {
             serializedObject.Update();
 
-            if (Event.current.type == EventType.DragPerform)//dragging objects into the list
-            {
-                Object[] dragged = DragAndDrop.objectReferences;
-
-                for (int index = 0; index < dragged.Length; ++index)
-                {
-                    nodeScript.prefabList.Add((GameObject)dragged[index]);
-                }
-            }
-
             SerializedProperty list1 = serializedObject.FindProperty("prefabList");//get prefab list
             EditorGUILayout.PropertyField(list1);//list label
             EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));//list size
 
-            while (list1.arraySize > nodeScript.prefabList.Count)//if the number in the inspector changes we need to update the main list
-            {
-                if (nodeScript.prefabList.Count == 0)
-                    nodeScript.prefabList.Add(null);//add an empty
-
-                else
-                    nodeScript.prefabList.Add(nodeScript.prefabList[nodeScript.prefabList.Count - 1]);//add the last element of the list (yea I know)
-            }
-
-            while (list1.arraySize < nodeScript.prefabList.Count)//make main list smaller
-                nodeScript.prefabList.RemoveAt(nodeScript.prefabList.Count - 1);//why oh why cant c# lists have pop_back?
+            serializedObject.ApplyModifiedProperties();
 
             //this is to keep the weights list the same size as the prefab list at all times.
             while (nodeScript.prefabWeights.Count < nodeScript.prefabList.Count)
@@ -409,39 +389,16 @@ public class Node2DInspector : Editor
 
         {
             serializedObject.Update();
-
-            if (Event.current.type == EventType.DragPerform)//dragging objects into the list
-            {
-                Object[] dragged = DragAndDrop.objectReferences;
-
-                for (int index = 0; index < dragged.Length; ++index)
-                {
-                    nodeScript.prefabList.Add((GameObject)dragged[index]);
-                }
-            }
-
             SerializedProperty list1 = serializedObject.FindProperty("prefabList");//get prefab list
             EditorGUILayout.PropertyField(list1);//list label
             EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));//list size
-
-            while (list1.arraySize > nodeScript.prefabList.Count)//if the number in the inspector changes we need to update the main list
-            {
-                if (nodeScript.prefabList.Count == 0)
-                    nodeScript.prefabList.Add(null);//add an empty
-
-                else
-                    nodeScript.prefabList.Add(nodeScript.prefabList[nodeScript.prefabList.Count - 1]);//add the last element of the list (yea I know)
-            }
-
-            while (list1.arraySize < nodeScript.prefabList.Count)//make main list smaller
-                nodeScript.prefabList.RemoveAt(nodeScript.prefabList.Count - 1);//why oh why cant c# lists have pop_back?
+            serializedObject.ApplyModifiedProperties();
 
             //this is to keep the weights list the same size as the prefab list at all times.
             while (nodeScript.prefabWeights.Count < nodeScript.prefabList.Count)
                 nodeScript.prefabWeights.Add(1f);
             while (nodeScript.prefabWeights.Count > nodeScript.prefabList.Count)
                 nodeScript.prefabWeights.RemoveAt(nodeScript.prefabWeights.Count - 1);
-
 
             SerializedProperty list2 = serializedObject.FindProperty("prefabWeights");//now get the list with the weights
 
