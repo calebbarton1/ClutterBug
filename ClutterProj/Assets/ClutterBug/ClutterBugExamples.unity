@@ -370,7 +370,8 @@ MonoBehaviour:
   numberToSpawn: 10
   prefabList:
   - {fileID: 1000011744960936, guid: c1821e21c3e166e4aa2a9e9acd19ddc4, type: 2}
-  prefabWeights: []
+  prefabWeights:
+  - 1
   additive: 0
   lockX: 0
   lockZ: 0
@@ -673,6 +674,9 @@ MonoBehaviour:
   prefabList:
   - {fileID: 1000011603042488, guid: f175126858f4c254ea14cb94508c4908, type: 2}
   - {fileID: 1000014264597770, guid: 9af43076d248ad747aa6bd1522c599aa, type: 2}
+  prefabWeights:
+  - 1
+  - 1
   additive: 0
   lockX: 0
   lockY: 0
@@ -813,7 +817,8 @@ MonoBehaviour:
   numberToSpawn: 78
   prefabList:
   - {fileID: 1000011744960936, guid: c1821e21c3e166e4aa2a9e9acd19ddc4, type: 2}
-  prefabWeights: []
+  prefabWeights:
+  - 1
   additive: 0
   lockX: 0
   lockZ: 0
@@ -859,7 +864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580376ef904d6264abee61c311c7a717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   allowOverlap: 0
   faceNormal: 0
   angleLimit: 89

@@ -39,17 +39,34 @@ public class Clutter2D : MonoBehaviour
     public int numberToSpawn = 1;
 
     public List<GameObject> prefabList;
+    public List<float> prefabWeights;
 
 
     public GameObject RandomObject()
     {
-        GameObject go;
-        int objIndex;
+        float currCount = 0;
+        float totalWieght = 0;
 
-        objIndex = Random.Range(0, prefabList.Count);
-        go = prefabList[objIndex];
+        foreach (float weight in prefabWeights)
+        {
+            totalWieght += weight;//get total weight
+        }
 
-        return go;
+        float rand = Random.Range(0, totalWieght);
+
+        for (int index = 0; index < prefabWeights.Count; ++index)
+        {
+            currCount += prefabWeights[index];
+
+            if (currCount > rand)
+            {
+                //Debug.Log("Using " + prefabList[index].name);
+                return prefabList[index];
+            }
+        }
+
+        //Debug.Log("Using " + prefabList[0].name);
+        return prefabList[Random.Range(0, prefabList.Count - 1)];//otherwise return a pure random
     }
 
     public void InstantiateObject(Vector3 _loc, float _mult, float _dist, Transform toParent)//instantiates object with given location

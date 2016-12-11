@@ -65,46 +65,63 @@ public class NodeInspector : Editor
         nodeScript.numberToSpawn = EditorGUILayout.IntField("Number of Clutter", nodeScript.numberToSpawn);
 
         EditorGUILayout.Separator();
-        EditorGUILayout.Separator();
-        EditorGUILayout.Separator();
-        //so the prefab wieghts is always the same length
 
-        //ShowList(serializedObject.FindProperty("prefabList"), serializedObject.FindProperty("prefabWeights"), true);
-
-        serializedObject.Update();
-        SerializedProperty list1 = serializedObject.FindProperty("prefabList");
-        EditorGUILayout.PropertyField(list1);
-        EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));// this is a problem. The user can edit this, but it doesn't update the list like a normal property field list
-
-        //TODO: Fix this shit right here
-        while (list1.arraySize > nodeScript.prefabList.Count)
-            nodeScript.prefabList.Add(nodeScript.prefabList[0]);
-        while (list1.arraySize < nodeScript.prefabList.Count)
-            nodeScript.prefabList.RemoveAt(nodeScript.prefabList.Count - 1);
-
-        while (nodeScript.prefabWeights.Count < nodeScript.prefabList.Count)
-            nodeScript.prefabWeights.Add(1f);
-        while (nodeScript.prefabWeights.Count > nodeScript.prefabList.Count)
-            nodeScript.prefabWeights.RemoveAt(nodeScript.prefabWeights.Count - 1);
-
-        SerializedProperty list2 = serializedObject.FindProperty("prefabWeights");
-
-        serializedObject.Update();
-
-        if (list1.isExpanded)
+        //drawing out custom list for the prefabs and thier random weighting
         {
-            //EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));
-            for (int index = 0; index < list1.arraySize; ++index)
+            serializedObject.Update();
+
+            if (Event.current.type == EventType.DragPerform)//dragging objects into the list
             {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.PropertyField(list1.GetArrayElementAtIndex(index), GUIContent.none);
-                EditorGUILayout.LabelField("Weight", GUILayout.Width(60));
-                EditorGUILayout.PropertyField(list2.GetArrayElementAtIndex(index), GUIContent.none);
-                EditorGUILayout.EndHorizontal();
+                Object[] dragged = DragAndDrop.objectReferences;
+
+                for (int index = 0; index < dragged.Length; ++index)
+                {
+                    nodeScript.prefabList.Add((GameObject)dragged[index]);
+                }
             }
+
+            SerializedProperty list1 = serializedObject.FindProperty("prefabList");//get prefab list
+            EditorGUILayout.PropertyField(list1);//list label
+            EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));//list size
+
+            while (list1.arraySize > nodeScript.prefabList.Count)//if the number in the inspector changes we need to update the main list
+            {
+                if (nodeScript.prefabList.Count == 0)
+                    nodeScript.prefabList.Add(null);//add an empty
+
+                else
+                    nodeScript.prefabList.Add(nodeScript.prefabList[nodeScript.prefabList.Count - 1]);//add the last element of the list (yea I know)
+            }
+
+            while (list1.arraySize < nodeScript.prefabList.Count)//make main list smaller
+                nodeScript.prefabList.RemoveAt(nodeScript.prefabList.Count - 1);//why oh why cant c# lists have pop_back?
+
+            //this is to keep the weights list the same size as the prefab list at all times.
+            while (nodeScript.prefabWeights.Count < nodeScript.prefabList.Count)
+                nodeScript.prefabWeights.Add(1f);
+            while (nodeScript.prefabWeights.Count > nodeScript.prefabList.Count)
+                nodeScript.prefabWeights.RemoveAt(nodeScript.prefabWeights.Count - 1);
+
+
+            SerializedProperty list2 = serializedObject.FindProperty("prefabWeights");//now get the list with the weights
+
+            serializedObject.Update();
+
+            if (list1.isExpanded && Event.current.type != EventType.DragPerform)
+            {
+                //EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));
+                for (int index = 0; index < list1.arraySize; ++index)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(list1.GetArrayElementAtIndex(index), GUIContent.none, GUILayout.Width(150));//the prefab
+                    EditorGUILayout.LabelField("Weight", GUILayout.Width(60));
+                    EditorGUILayout.PropertyField(list2.GetArrayElementAtIndex(index), GUIContent.none, GUILayout.Width(30));//the weight
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+
+            serializedObject.ApplyModifiedProperties();
         }
-        serializedObject.ApplyModifiedProperties();
-               
 
         EditorGUILayout.Separator();
 
@@ -122,7 +139,7 @@ public class NodeInspector : Editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
-        if (nodeScript.rotationOverride == Vector3.zero)
+        if (nodeScript.rotationOverride == Vector3.zero && Event.current.type != EventType.DragPerform)
         {
             EditorGUILayout.LabelField("Random Rotation");
 
@@ -224,11 +241,61 @@ public class NodeChildInspector : Editor
 
         EditorGUILayout.Separator();
 
-        //draw list
-        var property = serializedObject.FindProperty("prefabList");
-        serializedObject.Update();
-        EditorGUILayout.PropertyField(property, true);
-        serializedObject.ApplyModifiedProperties();
+        {
+            serializedObject.Update();
+
+            if (Event.current.type == EventType.DragPerform)//dragging objects into the list
+            {
+                Object[] dragged = DragAndDrop.objectReferences;
+
+                for (int index = 0; index < dragged.Length; ++index)
+                {
+                    nodeScript.prefabList.Add((GameObject)dragged[index]);
+                }
+            }
+
+            SerializedProperty list1 = serializedObject.FindProperty("prefabList");//get prefab list
+            EditorGUILayout.PropertyField(list1);//list label
+            EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));//list size
+
+            while (list1.arraySize > nodeScript.prefabList.Count)//if the number in the inspector changes we need to update the main list
+            {
+                if (nodeScript.prefabList.Count == 0)
+                    nodeScript.prefabList.Add(null);//add an empty
+
+                else
+                    nodeScript.prefabList.Add(nodeScript.prefabList[nodeScript.prefabList.Count - 1]);//add the last element of the list (yea I know)
+            }
+
+            while (list1.arraySize < nodeScript.prefabList.Count)//make main list smaller
+                nodeScript.prefabList.RemoveAt(nodeScript.prefabList.Count - 1);//why oh why cant c# lists have pop_back?
+
+            //this is to keep the weights list the same size as the prefab list at all times.
+            while (nodeScript.prefabWeights.Count < nodeScript.prefabList.Count)
+                nodeScript.prefabWeights.Add(1f);
+            while (nodeScript.prefabWeights.Count > nodeScript.prefabList.Count)
+                nodeScript.prefabWeights.RemoveAt(nodeScript.prefabWeights.Count - 1);
+
+
+            SerializedProperty list2 = serializedObject.FindProperty("prefabWeights");//now get the list with the weights
+
+            serializedObject.Update();
+
+            if (list1.isExpanded && Event.current.type != EventType.DragPerform)
+            {
+                //EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));
+                for (int index = 0; index < list1.arraySize; ++index)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(list1.GetArrayElementAtIndex(index), GUIContent.none, GUILayout.Width(150));//the prefab
+                    EditorGUILayout.LabelField("Weight", GUILayout.Width(60));
+                    EditorGUILayout.PropertyField(list2.GetArrayElementAtIndex(index), GUIContent.none, GUILayout.Width(30));//the weight
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
 
         EditorGUILayout.Separator();
 
@@ -363,11 +430,61 @@ public class Node2DInspector : Editor
 
         EditorGUILayout.Separator();
 
-        //draw list
-        var property = serializedObject.FindProperty("prefabList");
-        serializedObject.Update();
-        EditorGUILayout.PropertyField(property, true);
-        serializedObject.ApplyModifiedProperties();
+        {
+            serializedObject.Update();
+
+            if (Event.current.type == EventType.DragPerform)//dragging objects into the list
+            {
+                Object[] dragged = DragAndDrop.objectReferences;
+
+                for (int index = 0; index < dragged.Length; ++index)
+                {
+                    nodeScript.prefabList.Add((GameObject)dragged[index]);
+                }
+            }
+
+            SerializedProperty list1 = serializedObject.FindProperty("prefabList");//get prefab list
+            EditorGUILayout.PropertyField(list1);//list label
+            EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));//list size
+
+            while (list1.arraySize > nodeScript.prefabList.Count)//if the number in the inspector changes we need to update the main list
+            {
+                if (nodeScript.prefabList.Count == 0)
+                    nodeScript.prefabList.Add(null);//add an empty
+
+                else
+                    nodeScript.prefabList.Add(nodeScript.prefabList[nodeScript.prefabList.Count - 1]);//add the last element of the list (yea I know)
+            }
+
+            while (list1.arraySize < nodeScript.prefabList.Count)//make main list smaller
+                nodeScript.prefabList.RemoveAt(nodeScript.prefabList.Count - 1);//why oh why cant c# lists have pop_back?
+
+            //this is to keep the weights list the same size as the prefab list at all times.
+            while (nodeScript.prefabWeights.Count < nodeScript.prefabList.Count)
+                nodeScript.prefabWeights.Add(1f);
+            while (nodeScript.prefabWeights.Count > nodeScript.prefabList.Count)
+                nodeScript.prefabWeights.RemoveAt(nodeScript.prefabWeights.Count - 1);
+
+
+            SerializedProperty list2 = serializedObject.FindProperty("prefabWeights");//now get the list with the weights
+
+            serializedObject.Update();
+
+            if (list1.isExpanded && Event.current.type != EventType.DragPerform)
+            {
+                //EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));
+                for (int index = 0; index < list1.arraySize; ++index)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(list1.GetArrayElementAtIndex(index), GUIContent.none, GUILayout.Width(150));//the prefab
+                    EditorGUILayout.LabelField("Weight", GUILayout.Width(60));
+                    EditorGUILayout.PropertyField(list2.GetArrayElementAtIndex(index), GUIContent.none, GUILayout.Width(30));//the weight
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
 
         EditorGUILayout.Separator();
 
