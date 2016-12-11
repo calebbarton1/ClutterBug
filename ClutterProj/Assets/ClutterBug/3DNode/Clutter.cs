@@ -55,7 +55,6 @@ public class Clutter : MonoBehaviour
 
             if (currCount > rand)
             {
-                //Debug.Log("Using " + prefabList[index].name);
                 return prefabList[index];
             }
         }
