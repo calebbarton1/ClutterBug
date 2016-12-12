@@ -37,7 +37,7 @@ public class Clutter : MonoBehaviour
     public List<GameObject> prefabList;
     public List<float> prefabWeights;
 
-    public GameObject RandomObject()
+    public int RandomObject()
     {
         float currCount = 0;
         float totalWieght = 0;
@@ -55,29 +55,29 @@ public class Clutter : MonoBehaviour
 
             if (currCount > rand)
             {
-                return prefabList[index];
+                return index;
             }
         }
 
         //Debug.Log("Using " + prefabList[0].name);
-        return prefabList[Random.Range(0,prefabList.Count-1)];//otherwise return a pure random
+        return Random.Range(0,prefabList.Count-1);//otherwise return a pure random
     }
 
     public void InstantiateObject(Vector3 _loc, float _mult, float _dist, Transform toParent)//instantiates object with given location
     {
         //gets random object
-        GameObject toSpawn;
+        int toSpawn;
         toSpawn = RandomObject();
 
         _loc = transform.TransformPoint(_loc * _mult * _dist); //takes local transform into world space and modifies it using random value     
 
         GameObject tempObj;
-        tempObj = Instantiate(toSpawn, new Vector3(1000, 1000, 1000), Quaternion.identity) as GameObject;//get object into world
+        tempObj = Instantiate(prefabList[toSpawn], new Vector3(1000, 1000, 1000), Quaternion.identity) as GameObject;//get object into world
 
         //modify the object as needed
         tempObj = SetTransform(tempObj);
         tempObj.transform.parent = toParent;
-        tempObj.name = toSpawn.name;
+        tempObj.name = prefabList[toSpawn].name;
 
         //get collider info
         Mesh mesh = tempObj.GetComponent<MeshFilter>().sharedMesh;
