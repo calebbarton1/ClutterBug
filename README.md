@@ -46,7 +46,7 @@ Then simply drag your desired prefabs into the PrefabList, input the number of c
 
 ## Node Options
 
-![alt tag](http://imgur.com/a/SCuVB)
+![alt tag](http://i.imgur.com/BgSOLpa.png)
 
 There are a variety of settings to modify the clutter node:
 
