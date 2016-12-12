@@ -46,7 +46,7 @@ Then simply drag your desired prefabs into the PrefabList, input the number of c
 
 ## Node Options
 
-![alt tag](https://calebbartonblog.files.wordpress.com/2016/08/clutter2.png?w=594)
+![alt tag](http://imgur.com/a/SCuVB)
 
 There are a variety of settings to modify the clutter node:
 
@@ -60,13 +60,13 @@ There are a variety of settings to modify the clutter node:
 
 **Clutter Mask** - Clutter won't spawn on any object belonging to this list of layermasks.
 
-**Number of Clutter** - The number of prefabs to be spawned as clutter.
+**Number of Clutter** - The number of prefabs the node will attempt place as clutter
 
-**Prefab List** - The prefabs that will be spawned as clutter. Objects are randomly selected from this list to be spawned.
+**Prefab List** - The prefabs that will be spawned as clutter. Each object has a weighting affecting its chance of being chosen.
 
 **Enable Clutter Overlap** - This option allows clutter to overlap with one another.
 
-**Enable Additive Clutter**- If enabled the Spawn Clutter button will not delete the previously spawned clutter.
+**Enable Additive Clutter**- If enabled the previously created clutter will not be deleted.
 
 **Rotate to Surface Normal**- If enabled, clutter will rotate to face the surface where the clutter is being spawned.
 
@@ -108,6 +108,10 @@ Q:Why does my clutter spawn inside each other?
 
 A: If your clutter is bigger than the node, then the nodes raycast starts inside your clutter. Either scale the clutter down, or make the node bigger.
 
-Q: Why does my clutter spawns on top of each other?
+Q: Why does my clutter spawn on top of each other?
 
 A: Make sure you have a layer named "Clutter" and that your prefabs are a part of that layer.
+
+# Known Issues
+1.) When dragging prefabs onto the Prefab List, you cannot replace an individual element with the dragged object.
+2.) Objects with small meshes and large scales will be displaced very high in the sky, as the Clutter script offsets position so that the clutter isn't in the ground. This is based on scale.
