@@ -123,7 +123,7 @@ public class NodeInspector : Editor
             //Showing the vector2 values as min/max
             //X
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("X Rotation");
+            EditorGUILayout.LabelField("X Rotation", GUILayout.Width(80));
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
             nodeScript.rotX.x = EditorGUILayout.FloatField(nodeScript.rotX.x);
             EditorGUILayout.LabelField("Max", GUILayout.Width(30));
@@ -132,7 +132,7 @@ public class NodeInspector : Editor
 
             //Y
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Y Rotation");
+            EditorGUILayout.LabelField("Y Rotation", GUILayout.Width(80));
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
             nodeScript.rotY.x = EditorGUILayout.FloatField(nodeScript.rotY.x);
             EditorGUILayout.LabelField("Max", GUILayout.Width(30));
@@ -141,7 +141,7 @@ public class NodeInspector : Editor
 
             //Z
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Z Rotation");
+            EditorGUILayout.LabelField("Z Rotation", GUILayout.Width(80));
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
             nodeScript.rotZ.x = EditorGUILayout.FloatField(nodeScript.rotZ.x);
             EditorGUILayout.LabelField("Max", GUILayout.Width(30));
@@ -276,7 +276,7 @@ public class NodeChildInspector : Editor
             //Showing the vector2 values as min/max
             //X
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("X Rotation");
+            EditorGUILayout.LabelField("X Rotation", GUILayout.Width(80));
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
             nodeScript.rotX.x = EditorGUILayout.FloatField(nodeScript.rotX.x);
             EditorGUILayout.LabelField("Max", GUILayout.Width(30));
@@ -285,7 +285,7 @@ public class NodeChildInspector : Editor
 
             //Y
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Y Rotation");
+            EditorGUILayout.LabelField("Y Rotation", GUILayout.Width(80));
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
             nodeScript.rotY.x = EditorGUILayout.FloatField(nodeScript.rotY.x);
             EditorGUILayout.LabelField("Max", GUILayout.Width(30));
@@ -294,7 +294,7 @@ public class NodeChildInspector : Editor
 
             //Z
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Z Rotation");
+            EditorGUILayout.LabelField("Z Rotation", GUILayout.Width(80));
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
             nodeScript.rotZ.x = EditorGUILayout.FloatField(nodeScript.rotZ.x);
             EditorGUILayout.LabelField("Max", GUILayout.Width(30));
@@ -312,7 +312,7 @@ public class NodeChildInspector : Editor
         if (nodeScript.scaleOverride == Vector3.zero)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Random Scale");
+            EditorGUILayout.LabelField("Random Scale", GUILayout.Width(100));
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
             nodeScript.randomScale.x = EditorGUILayout.FloatField(nodeScript.randomScale.x);
             EditorGUILayout.LabelField("Max", GUILayout.Width(30));
@@ -461,7 +461,7 @@ public class Node2DInspector : Editor
         {
             //Showing the vector2 values as min/max
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Random Rotation");
+            EditorGUILayout.LabelField("Random Rotation", GUILayout.Width(110));
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
             nodeScript.rotZ.x = EditorGUILayout.FloatField(nodeScript.rotZ.x);
             EditorGUILayout.LabelField("Max", GUILayout.Width(30));
@@ -479,7 +479,7 @@ public class Node2DInspector : Editor
         if (nodeScript.scaleOverride == Vector2.zero)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Random Scale");
+            EditorGUILayout.LabelField("Random Scale", GUILayout.Width(100));
             EditorGUILayout.LabelField("Min", GUILayout.Width(30));
             nodeScript.randomScale.x = EditorGUILayout.FloatField(nodeScript.randomScale.x);
             EditorGUILayout.LabelField("Max", GUILayout.Width(30));
