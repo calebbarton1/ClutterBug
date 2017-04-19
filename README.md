@@ -38,9 +38,9 @@ Clutterbug runs in editor mode by default. If you wish to use ClutterBug at runt
 
 Clutter bug works with nodes that have area of effects. Place a node by clicking "Create Node" in the ClutterBug menu, or drag the prefab in the folder.
 
-![alt tag](https://calebbartonblog.files.wordpress.com/2016/08/clutter1.png?w=594)
+![alt tag](http://i.imgur.com/KB7E5nj.png) ![alt tag](http://i.imgur.com/lgjDom7.jpg)
 
-Once you've done  this, you can modify the transform as you would a normal game object.
+Once you've done this, you can modify the nodes transform as you would a normal gameObject.
 
 ## Spawning Clutter
 
