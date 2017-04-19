@@ -7,16 +7,9 @@ using UnityEngine;
 using System.Collections.Generic;
 
 #if UNITY_EDITOR
-using UnityEditor;
-#endif
-
-#if UNITY_EDITOR
 [ExecuteInEditMode]
 public class Clutter2D : MonoBehaviour
 {
-    //Made by Caleb Barton
-    //github.com/calebbarton1
-
     public bool debug = false;
     public bool allowOverlap = false;
 
@@ -69,11 +62,10 @@ public class Clutter2D : MonoBehaviour
         return Random.Range(0, prefabList.Count - 1);//otherwise return a pure random
     }
 
-    public void InstantiateObject(Vector3 _loc, float _mult, float _dist, Transform toParent)//instantiates object with given location
+    public void InstantiateObject(Vector3 _loc, float _mult, float _dist, Transform _toParent)//instantiates object with given location
     {
         //gets random object
-        int toSpawn;
-        toSpawn = RandomObject();
+        int toSpawn = RandomObject();
 
         _loc = transform.TransformPoint(_loc * _mult * _dist); //takes local transform into world space and modifies it using random value     
 
@@ -82,12 +74,22 @@ public class Clutter2D : MonoBehaviour
 
         //modify the object as needed
         tempObj = SetTransform(tempObj);
-        tempObj.transform.parent = toParent;
+        tempObj.transform.parent = _toParent;
         tempObj.name = prefabList[toSpawn].name;
 
 
         //get collider info
         SpriteRenderer mesh = tempObj.GetComponent<SpriteRenderer>();
+
+        if (mesh == null)
+        {
+            if (debug)
+                Debug.Log("2D Clutter requires a SpriteRenderer. 2DClutterBug requires this to function");
+
+            DestroyImmediate(tempObj);
+            return;
+        }
+
 
         //sorting layers
         if (orderLayerOverride == 0)

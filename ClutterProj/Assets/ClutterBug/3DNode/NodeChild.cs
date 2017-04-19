@@ -32,25 +32,34 @@ public class NodeChild : Clutter
 
         transform.localScale = temp;
 
-        Mesh col = GetComponent<MeshFilter>().sharedMesh;
+        Mesh mCol;
+        float toMove;
 
-        //so objects aren't being spawned inside their parent. Their parent is essentially another node.
+        //to make sure that the children aren't spawning inside of thier parent, we get the scale or the mesh, depening on user input.
+        if (useMesh)
         {
-            //use the largest value of the scale to ensure objects aren't inside parent
-            float toMove;
-            if (col.bounds.size.x > col.bounds.size.z)
-                toMove = col.bounds.size.x;
+            mCol = GetComponent<MeshFilter>().sharedMesh;
+
+            if (mCol.bounds.size.x > mCol.bounds.size.z)
+                toMove = mCol.bounds.size.x;
 
             else
-                toMove = col.bounds.size.z;
-
-            distance += toMove;
-
-            if (distance == 0)
-                distance = 1;
+                toMove = mCol.bounds.size.z;
         }
 
+        else
+        {
+            if (transform.lossyScale.x > transform.lossyScale.z)
+                toMove = transform.lossyScale.x;
 
+            else
+                toMove = transform.lossyScale.z;
+        }
+
+        distance += toMove;
+
+        if (distance == 0)
+            distance = 1;
 
         if (prefabList.Count != 0 && numberToSpawn != 0)
         {

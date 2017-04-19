@@ -66,7 +66,8 @@ public class NodeInspector : Editor
 
         EditorGUILayout.Separator();
 
-        //drawing out custom list for the prefabs and thier random weighting
+        //drawing out custom list for the prefabs and their random weighting
+        //TODO: ALLOW DRAG AND DROP TO REPLACE ELEMENTS
         {
             serializedObject.Update();
 
@@ -84,7 +85,7 @@ public class NodeInspector : Editor
             serializedObject.Update();
             SerializedProperty list2 = serializedObject.FindProperty("prefabWeights");//now get the list with the weights           
 
-            if (list1.isExpanded && Event.current.type != EventType.DragPerform)
+            if (list1.isExpanded && Event.current.type != EventType.DragPerform)//doesn't like to begin horizontals when the drag is updating, so we wait until next frame
             {
                 //EditorGUILayout.PropertyField(list1.FindPropertyRelative("Array.size"));
                 for (int index = 0; index < list1.arraySize; ++index)
@@ -112,6 +113,11 @@ public class NodeInspector : Editor
 
         nodeScript.lockX = EditorGUILayout.Toggle("Lock X Postion", nodeScript.lockX);
         nodeScript.lockZ = EditorGUILayout.Toggle("Lock Z Postion", nodeScript.lockZ);
+
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+
+        nodeScript.useMesh = EditorGUILayout.Toggle("Use Mesh Scaling", nodeScript.useMesh);
 
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
@@ -156,7 +162,7 @@ public class NodeInspector : Editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
-        if (nodeScript.scaleOverride == Vector3.zero)
+        if (nodeScript.scaleOverride == Vector3.zero && Event.current.type != EventType.DragPerform)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Random Scale");
@@ -171,6 +177,7 @@ public class NodeInspector : Editor
     }
 
     //Getting the Layers to draw into the inspector
+    //TODO: MAKE THIS ITS OWN CLASS
     static LayerMask LayerMaskField(string label, LayerMask layerMask)
     {
         List<int> layerNumbers = new List<int>();

@@ -7,10 +7,6 @@ using UnityEngine;
 using System.Collections.Generic;
 
 #if UNITY_EDITOR
-using UnityEditor;
-#endif
-
-#if UNITY_EDITOR
 [ExecuteInEditMode]
 public class Clutter : MonoBehaviour
 {
@@ -19,9 +15,9 @@ public class Clutter : MonoBehaviour
     public bool allowOverlap = false;
 
     public bool faceNormal = false;
-    
+
     public float angleLimit = 45;
-  
+
     public Vector2 rotX, rotY, rotZ;
 
     public Vector3 rotationOverride;
@@ -37,6 +33,8 @@ public class Clutter : MonoBehaviour
     public List<GameObject> prefabList;
     public List<float> prefabWeights;
 
+    public bool useMesh = false;
+
     public int RandomObject()
     {
         float currCount = 0;
@@ -46,7 +44,7 @@ public class Clutter : MonoBehaviour
         {
             totalWieght += weight;//get total weight
         }
-        
+
         float rand = Random.Range(0, totalWieght);
 
         for (int index = 0; index < prefabWeights.Count; ++index)
@@ -60,10 +58,10 @@ public class Clutter : MonoBehaviour
         }
 
         //Debug.Log("Using " + prefabList[0].name);
-        return Random.Range(0,prefabList.Count-1);//otherwise return a pure random
+        return Random.Range(0, prefabList.Count - 1);//otherwise return a pure random
     }
 
-    public void InstantiateObject(Vector3 _loc, float _mult, float _dist, Transform toParent)//instantiates object with given location
+    public void InstantiateObject(Vector3 _loc, float _mult, float _dist, Transform _toParent)//instantiates object with given location
     {
         //gets random object
         int toSpawn;
@@ -76,7 +74,7 @@ public class Clutter : MonoBehaviour
 
         //modify the object as needed
         tempObj = SetTransform(tempObj);
-        tempObj.transform.parent = toParent;
+        tempObj.transform.parent = _toParent;
         tempObj.name = prefabList[toSpawn].name;
 
         //get collider info
@@ -89,7 +87,6 @@ public class Clutter : MonoBehaviour
 
         if (col != null)
             conv = col.convex;
-
 
         //setting up info
         RaycastHit hit;
@@ -113,21 +110,34 @@ public class Clutter : MonoBehaviour
         {
             if (debug)
                 Debug.Log("Using casting");
-            //make spherecast size the largest of the mesh
+            //make spherecast size the largest of the mesh.
             float sphereSize;
 
-            if (mesh.bounds.extents.x > mesh.bounds.extents.z)
-                sphereSize = mesh.bounds.extents.x;
+            if (useMesh)
+            {
+                if (mesh.bounds.extents.x > mesh.bounds.extents.z)
+                    sphereSize = mesh.bounds.extents.x;
+
+                else
+                    sphereSize = mesh.bounds.extents.z;
+            }
 
             else
-                sphereSize = mesh.bounds.extents.z;
+            {
+                if (tempObj.transform.lossyScale.x > tempObj.transform.lossyScale.z)
+                    sphereSize = tempObj.transform.lossyScale.x;
+
+                else
+                    sphereSize = tempObj.transform.lossyScale.z;
+            }
+
+
 
             if (allowOverlap)
             {
                 //ignore user layermasks if chosen
                 cast = Physics.SphereCast(_loc, sphereSize, -transform.up, out hit, Mathf.Infinity, ~clutterMask);
             }
-
 
             else
             {
@@ -163,8 +173,6 @@ public class Clutter : MonoBehaviour
                 return;
             }
 
-
-
             if ((clutterMask.value & (1 << hit.collider.gameObject.layer)) != 0 && !allowOverlap)//checking if its allowed to collide with hit point
             {
                 if (debug)
@@ -172,9 +180,24 @@ public class Clutter : MonoBehaviour
                 DestroyImmediate(tempObj);
                 return;
             }
+ 
+            if (useMesh)
+            {
+                if (mesh == null)
+                {
+                    if (debug)
+                        Debug.LogWarning("Cannot use Mesh Scaling without a Meshfilter. Swapping to global transform scaling.");
 
-            //Move object where it's supposed to be and offset y position so it's not in collider           
-            tempObj.transform.position = hit.point + (hit.normal * (tempObj.transform.lossyScale.y * .5f));
+                    useMesh = false;
+                }
+
+                else                
+                    tempObj.transform.position = hit.point + (hit.normal * (mesh.bounds.extents.y));//else use the mesh size                
+            }
+
+            else
+                tempObj.transform.position = hit.point + (hit.normal * (tempObj.transform.lossyScale.y * .5f));//Move object where it's supposed to be and offset y position so it's not in collider using global  
+
 
             if (faceNormal)
             {
@@ -248,17 +271,16 @@ public class Clutter : MonoBehaviour
 
             return toReturn;
         }
-
     }
 
-    public Vector3 SetScale(Transform go2)
+    public Vector3 SetScale(Transform _tran)
     {
         Vector3 toReturn = new Vector3(0, 0, 0);
 
         if (scaleOverride == Vector3.zero && randomScale != Vector2.zero)
         {
             float rand = Random.Range(randomScale.x, randomScale.y);
-            toReturn = go2.localScale * rand;
+            toReturn = _tran.localScale * rand;
 
             return toReturn;
         }
@@ -269,19 +291,19 @@ public class Clutter : MonoBehaviour
                 toReturn.x = scaleOverride.x;
 
             else
-                toReturn.x = go2.localScale.x;
+                toReturn.x = _tran.localScale.x;
 
             if (scaleOverride.y != 0)
                 toReturn.y = scaleOverride.y;
 
             else
-                toReturn.y = go2.localScale.y;
+                toReturn.y = _tran.localScale.y;
 
             if (scaleOverride.z != 0)
                 toReturn.z = scaleOverride.z;
 
             else
-                toReturn.z = go2.localScale.z;
+                toReturn.z = _tran.localScale.z;
 
             return toReturn;
         }
