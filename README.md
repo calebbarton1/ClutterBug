@@ -1,8 +1,10 @@
 # ClutterBug
 
+ClutterBug is a tool for Unity that places given environmental (or clutter) objects in a game randomly. Unlike other environmental "painting" tools, ClutterBug has hierarchal node system to give order to the random generation. 
+
 If you have any questions contact me at caleb.barton@hotmail.com
 
-If you find any bugs please notify me using the Github report system.
+Report any bugs please notify me using the Github report system.
 
 # System Rquirements
 
