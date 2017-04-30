@@ -20,7 +20,7 @@ Before using ClutterBug, you must create a layer in your project named "Clutter"
 
 Then, change the layer of any prefabs you want to use with the newly created "Clutter". This is required so that clutter doesn't stack on top of each other.
 
-![alt tag](https://calebbartonblog.files.wordpress.com/2016/08/clutterbug-tute5.png?w=594)
+![alt tag](https://calebbarton1.files.wordpress.com/2016/08/clutterbug-tute5.png?w=594)
 
 ### Colliders
 
