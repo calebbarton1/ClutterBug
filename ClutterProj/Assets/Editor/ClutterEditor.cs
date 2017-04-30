@@ -120,6 +120,10 @@ public class NodeInspector : Editor
         nodeScript.useMesh = EditorGUILayout.Toggle("Use Mesh Scaling", nodeScript.useMesh);
 
         EditorGUILayout.Separator();
+        
+        nodeScript.offsetPos = EditorGUILayout.Toggle("Offset Position", nodeScript.offsetPos);
+
+        EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
         if (nodeScript.rotationOverride == Vector3.zero && Event.current.type != EventType.DragPerform)
@@ -235,11 +239,13 @@ public class NodeChildInspector : Editor
             serializedObject.ApplyModifiedProperties();
 
             //this is to keep the weights list the same size as the prefab list at all times.
-            while (nodeScript.prefabWeights.Count < nodeScript.prefabList.Count)
-                nodeScript.prefabWeights.Add(1f);
-            while (nodeScript.prefabWeights.Count > nodeScript.prefabList.Count)
-                nodeScript.prefabWeights.RemoveAt(nodeScript.prefabWeights.Count - 1);
-
+            if (nodeScript.prefabWeights != null)
+            {
+                while (nodeScript.prefabWeights.Count < nodeScript.prefabList.Count)
+                    nodeScript.prefabWeights.Add(1f);
+                while (nodeScript.prefabWeights.Count > nodeScript.prefabList.Count)
+                    nodeScript.prefabWeights.RemoveAt(nodeScript.prefabWeights.Count - 1);
+            }
 
             SerializedProperty list2 = serializedObject.FindProperty("prefabWeights");//now get the list with the weights
 
@@ -276,7 +282,16 @@ public class NodeChildInspector : Editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
-        if (nodeScript.rotationOverride == Vector3.zero)
+        nodeScript.useMesh = EditorGUILayout.Toggle("Use Mesh Scaling", nodeScript.useMesh);
+
+        EditorGUILayout.Separator();
+
+        nodeScript.offsetPos = EditorGUILayout.Toggle("Offset Position", nodeScript.offsetPos);
+
+        EditorGUILayout.Separator();
+        EditorGUILayout.Separator();
+
+        if (nodeScript.rotationOverride == Vector3.zero && Event.current.type != EventType.DragPerform)
         {
             EditorGUILayout.LabelField("Random Rotation");
 
@@ -316,7 +331,7 @@ public class NodeChildInspector : Editor
         EditorGUILayout.Separator();
         EditorGUILayout.Separator();
 
-        if (nodeScript.scaleOverride == Vector3.zero)
+        if (nodeScript.scaleOverride == Vector3.zero && Event.current.type != EventType.DragPerform)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Random Scale", GUILayout.Width(100));

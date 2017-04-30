@@ -33,7 +33,10 @@ public class Clutter : MonoBehaviour
     public List<GameObject> prefabList;
     public List<float> prefabWeights;
 
+    [Tooltip("Testing tooltip")]
     public bool useMesh = false;
+    
+    public bool offsetPos;
 
     public int RandomObject()
     {
@@ -180,24 +183,29 @@ public class Clutter : MonoBehaviour
                 DestroyImmediate(tempObj);
                 return;
             }
- 
-            if (useMesh)
-            {
-                if (mesh == null)
-                {
-                    if (debug)
-                        Debug.LogWarning("Cannot use Mesh Scaling without a Meshfilter. Swapping to global transform scaling.");
 
-                    useMesh = false;
+            if (offsetPos)
+            {
+                if (useMesh)
+                {
+                    if (mesh == null)
+                    {
+                        if (debug)
+                            Debug.LogWarning("Cannot use Mesh Scaling without a Meshfilter. Swapping to global transform scaling.");
+
+                        useMesh = false;
+                    }
+
+                    else
+                        tempObj.transform.position = hit.point + (hit.normal * (mesh.bounds.extents.y));//else use the mesh size                
                 }
 
-                else                
-                    tempObj.transform.position = hit.point + (hit.normal * (mesh.bounds.extents.y));//else use the mesh size                
+                else
+                    tempObj.transform.position = hit.point + (hit.normal * (tempObj.transform.lossyScale.y * .5f));//Move object where it's supposed to be and offset y position so it's not in collider using global  
             }
 
             else
-                tempObj.transform.position = hit.point + (hit.normal * (tempObj.transform.lossyScale.y * .5f));//Move object where it's supposed to be and offset y position so it's not in collider using global  
-
+                tempObj.transform.position = hit.point;//otherwise just move straight to the point
 
             if (faceNormal)
             {
