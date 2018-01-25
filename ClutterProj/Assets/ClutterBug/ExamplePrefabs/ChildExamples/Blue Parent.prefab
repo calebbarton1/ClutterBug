@@ -8,10 +8,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 481874}
-  - component: {fileID: 114000014055854032}
   - component: {fileID: 3327230}
   - component: {fileID: 13603718}
   - component: {fileID: 2314964}
+  - component: {fileID: 114139678111722288}
   m_Layer: 8
   m_Name: Blue Parent
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 124542}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -41,6 +41,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -56,6 +57,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -95,7 +97,7 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 124542}
   m_IsPrefabParent: 1
---- !u!114 &114000014055854032
+--- !u!114 &114139678111722288
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -103,33 +105,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 124542}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9600e458eec7f4b49a494d91e0f85bd4, type: 3}
+  m_Script: {fileID: 11500000, guid: 580376ef904d6264abee61c311c7a717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
   allowOverlap: 0
   faceNormal: 0
   angleLimit: 45
+  clutterMask:
+    serializedVersion: 2
+    m_Bits: 256
+  numberToSpawn: 5
+  distance: 5
+  useMesh: 0
+  offsetPos: 1
   rotX: {x: 0, y: 0}
   rotY: {x: 0, y: 0}
   rotZ: {x: 0, y: 0}
   rotationOverride: {x: 0, y: 0, z: 0}
   randomScale: {x: 0, y: 0}
   scaleOverride: {x: 0, y: 0, z: 0}
-  clutterMask:
-    serializedVersion: 2
-    m_Bits: 256
-  numberToSpawn: 3
   prefabList:
-  - {fileID: 137058, guid: 9bc2e815de0af5d408904845c2425d82, type: 2}
-  - {fileID: 137058, guid: 9bc2e815de0af5d408904845c2425d82, type: 2}
   - {fileID: 137058, guid: 9bc2e815de0af5d408904845c2425d82, type: 2}
   prefabWeights:
   - 1
-  - 1
-  - 1
-  useMesh: 0
-  offsetPos: 1
-  distance: 2
+  additive: 0
   lockX: 0
   lockZ: 0
+  shape: 0
+  m_clutterParent: {fileID: 0}
+  m_IsChild: 0

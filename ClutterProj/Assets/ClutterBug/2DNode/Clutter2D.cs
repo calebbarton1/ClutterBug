@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2016 Caleb Barton (caleb.barton@hotmail.com)
+﻿// Copyright (C) 2018 Caleb Barton (caleb.barton@hotmail.com)
 //github.com/calebbarton1
 //Released under MIT License
 //https://opensource.org/licenses/MIT
